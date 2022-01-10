@@ -1,0 +1,33 @@
+
+/* Class = "UILabel"; text = "Day"; ObjectID = "M2G-Xf-xRK"; */
+"M2G-Xf-xRK.text" = "Day";
+
+/* Class = "UILabel"; text = "- - -"; ObjectID = "M8Q-9V-p5q"; */
+"M8Q-9V-p5q.text" = "- - -";
+
+/* Class = "UILabel"; text = "⌛"; ObjectID = "UHu-Rx-Xf1"; */
+"UHu-Rx-Xf1.text" = "⌛";
+
+/* Class = "UILabel"; text = "Daily forecast"; ObjectID = "X7i-f7-BTm"; */
+"X7i-f7-BTm.text" = "Daily forecast";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "Xtm-qY-2UU"; */
+"Xtm-qY-2UU.normalTitle" = "Button";
+
+/* Class = "UILabel"; text = "Night"; ObjectID = "aHM-yp-RAS"; */
+"aHM-yp-RAS.text" = "Night";
+
+/* Class = "UILabel"; text = "- - -"; ObjectID = "aYB-El-7sN"; */
+"aYB-El-7sN.text" = "- - -";
+
+/* Class = "UILabel"; text = "- - -"; ObjectID = "beT-z1-FbE"; */
+"beT-z1-FbE.text" = "- - -";
+
+/* Class = "UILabel"; text = "Humidity: ⌛"; ObjectID = "qar-Tb-kol"; */
+"qar-Tb-kol.text" = "Humidity: ⌛";
+
+/* Class = "UILabel"; text = "Wind speed: ⌛"; ObjectID = "qlV-xG-9ea"; */
+"qlV-xG-9ea.text" = "Wind speed: ⌛";
+
+/* Class = "UILabel"; text = "Title"; ObjectID = "yk9-yi-z25"; */
+"yk9-yi-z25.text" = "Title";
