@@ -14,12 +14,17 @@ final class WeatherPresenterImp: WeatherPresenterInput {
     var storageService: StorageServiceImp!
     
     var interactor: WeatherInteractorInput!
+    var router: WeatherRouterInput!
     
     //MARK: - Protocol funcs
     
     func viewIsReady() {
         interactor.locationAccessRequest()
         interactor.getWeatherData()
+    }
+    
+    func showChoosenCities() {
+        router.showChoosenCities()
     }
 }
 

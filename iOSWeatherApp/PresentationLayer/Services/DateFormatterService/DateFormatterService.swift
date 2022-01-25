@@ -9,4 +9,6 @@ import Foundation
 
 protocol DateFormatterService {
     func dailyDateFormatter(date: Double) -> String
+    func hourlyDateFormatter(date: Double) -> String
+
 }

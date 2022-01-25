@@ -10,6 +10,7 @@ import Foundation
 protocol WeatherPresenterInput {
     var view: WeatherPresenterOutput? { get set }
     func viewIsReady()
+    func showChoosenCities()
 }
 
 protocol WeatherPresenterOutput: AnyObject {

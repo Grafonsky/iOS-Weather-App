@@ -105,8 +105,9 @@ final class WeatherInteractorImp: NSObject, WeatherInteractorInput {
 // MARK: - Extensions
 
 extension WeatherInteractorImp: CLLocationManagerDelegate {
-    
+        
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        print("locations -----> \(locations)")
         if !locations.isEmpty {
             self.currentLocation = locations.first ?? CLLocation()
             locationService.getUserPosition(currentLocation: currentLocation, completion: { [weak self] city, lat, lon in

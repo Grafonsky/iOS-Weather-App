@@ -14,6 +14,7 @@ final class WeatherAssembly {
         
         let presenter = WeatherPresenterImp()
         let interactor = WeatherInteractorImp()
+        let router = WeatherRouterImp()
         
         let weatherService = WeatherServiceImp()
         let locationService = LocationServiceImp()
@@ -22,6 +23,7 @@ final class WeatherAssembly {
         
         presenter.interactor = interactor
         presenter.view = controller
+        presenter.router = router
         
         interactor.output = presenter
         interactor.weatherService = weatherService
@@ -30,6 +32,8 @@ final class WeatherAssembly {
         
         controller.presenter = presenter
         controller.dateFormatterService = dateFormatterService
+        
+        router.view = controller
         
         return controller
     }

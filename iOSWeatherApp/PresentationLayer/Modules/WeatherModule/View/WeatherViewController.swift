@@ -25,12 +25,21 @@ class WeatherViewController: UIViewController {
     @IBOutlet weak var feelsLikeLabel: UILabel!
     @IBOutlet weak var feelsLikeDegreesLabel: UILabel!
     
-    // Humidity Info
+    // Wind speed outlets
+    @IBOutlet weak var windSpeedView: UIVisualEffectView!
+    @IBOutlet weak var windSpeedLabel: UILabel!
+    
+    
+    // Humidity outlets
     @IBOutlet weak var humidityView: UIVisualEffectView!
     @IBOutlet weak var humidityLabel: UILabel!
     @IBOutlet weak var humidityDegreesLabel: UILabel!
     
-    // Daily forecast outlets
+    // Hourly outlets
+    @IBOutlet weak var hourlyView: UIVisualEffectView!
+    @IBOutlet weak var hourlyCollectionView: UICollectionView!
+    
+    // Daily outlets
     @IBOutlet weak var dailyView: UIVisualEffectView!
     @IBOutlet weak var dailyForecastLabel: UILabel!
     @IBOutlet weak var dailyNightLabel: UILabel!
@@ -53,7 +62,10 @@ class WeatherViewController: UIViewController {
     private func config() {
         configAlert()
         configFeelsLike()
+        configWindSpeed()
         configHumidity()
+        hourlyConfig()
+        configCollectionView()
         dailyConfig()
         configTableView()
     }
@@ -68,9 +80,26 @@ class WeatherViewController: UIViewController {
         feelsLikeView.layer.cornerRadius = 15
     }
     
+    private func configWindSpeed() {
+        windSpeedView.clipsToBounds = true
+        windSpeedView.layer.cornerRadius = 15
+    }
+    
     private func configHumidity() {
         humidityView.clipsToBounds = true
         humidityView.layer.cornerRadius = 15
+    }
+    
+    private func hourlyConfig() {
+        hourlyView.clipsToBounds = true
+        hourlyView.layer.cornerRadius = 15
+    }
+    
+    private func configCollectionView() {
+        hourlyCollectionView.backgroundColor = .clear
+        hourlyCollectionView.delegate = self
+        hourlyCollectionView.dataSource = self
+        hourlyCollectionView.register(UINib(nibName: "HourlyForecastCell", bundle: nil), forCellWithReuseIdentifier: "HourlyForecastCell")
     }
     
     private func dailyConfig() {
@@ -92,7 +121,14 @@ class WeatherViewController: UIViewController {
         maxMinLabel.text = "Max.: \(weatherEntity.maxTemp)°, min.: \(weatherEntity.minTemp)°"
         alertDescLabel.text = "There's no danger"
         feelsLikeDegreesLabel.text = "\(weatherEntity.feelsLike)°"
+        windSpeedLabel.text = "\(weatherEntity.windSpeed) m/s"
         humidityDegreesLabel.text = "\(weatherEntity.humidity)%"
+    }
+    
+    // MARK: - Actions
+    
+    @IBAction func ActionShowChoosenCities(_ sender: Any) {
+        presenter.showChoosenCities()
     }
 }
 
@@ -103,13 +139,14 @@ extension WeatherViewController: WeatherPresenterOutput {
         weatherEntity = entity
         configDataToUI()
         dailyTableView.reloadData()
+        hourlyCollectionView.reloadData()
     }
 }
 
 extension WeatherViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         guard let entity = weatherEntity else { return 0 }
-        return entity.dailyForecast.count - 1
+        return entity.dailyForecast.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -117,6 +154,7 @@ extension WeatherViewController: UITableViewDelegate, UITableViewDataSource {
         let daily = forecast[indexPath.row]
         if let cell = dailyTableView.dequeueReusableCell(withIdentifier: "DailyForecastCell", for: indexPath) as? DailyForecastCell {
             cell.backgroundColor = .clear
+            cell.isUserInteractionEnabled = false
             let dayOfWeek = weatherEntity.dailyForecast[indexPath.row]
             let icon = daily.weather[0].icon
             let iconsDict = WeatherIconsModel()
@@ -129,5 +167,33 @@ extension WeatherViewController: UITableViewDelegate, UITableViewDataSource {
             return cell
         }
         return UITableViewCell()
+    }
+}
+
+extension WeatherViewController: UICollectionViewDelegate, UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        if weatherEntity.hourlyForecast.count != 0 {
+            return 24
+        }
+        return 0
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        if let cell = hourlyCollectionView.dequeueReusableCell(withReuseIdentifier: "HourlyForecastCell", for: indexPath) as? HourlyForecastCell {
+            cell.backgroundColor = .clear
+            let hourly = weatherEntity.hourlyForecast[indexPath.row]
+            let temp = hourly.temp
+            let icon = hourly.weather[0].icon
+            let time = hourly.dt
+            let iconsDict = WeatherIconsModel()
+            guard let unwrapIcon = iconsDict.iconsDict[icon] else { return UICollectionViewCell() }
+            
+            cell.degreesLabel.text = "\(round(temp - 273.15))°"
+            cell.weatherPic.image = UIImage(systemName: unwrapIcon)
+            cell.timeLabel.text = dateFormatterService.hourlyDateFormatter(date: hourly.dt)
+            
+            return cell
+        }
+        return UICollectionViewCell()
     }
 }

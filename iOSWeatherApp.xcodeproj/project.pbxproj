@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		903664BF279FB4AC00618612 /* WeatherRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 903664BE279FB4AC00618612 /* WeatherRouter.swift */; };
+		903664C1279FB4B300618612 /* WeatherRouterImp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 903664C0279FB4B300618612 /* WeatherRouterImp.swift */; };
 		9065C051279F3A1B00A72A11 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9065C050279F3A1B00A72A11 /* AppDelegate.swift */; };
 		9065C055279F3A1B00A72A11 /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9065C054279F3A1B00A72A11 /* RootViewController.swift */; };
 		9065C05A279F3A1B00A72A11 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9065C059279F3A1B00A72A11 /* Assets.xcassets */; };
@@ -41,6 +43,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		903664BE279FB4AC00618612 /* WeatherRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherRouter.swift; sourceTree = "<group>"; };
+		903664C0279FB4B300618612 /* WeatherRouterImp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherRouterImp.swift; sourceTree = "<group>"; };
 		9065C04D279F3A1B00A72A11 /* iOSWeatherApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iOSWeatherApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9065C050279F3A1B00A72A11 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9065C054279F3A1B00A72A11 /* RootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootViewController.swift; sourceTree = "<group>"; };
@@ -151,6 +155,8 @@
 		9065C067279F3A6100A72A11 /* Router */ = {
 			isa = PBXGroup;
 			children = (
+				903664BE279FB4AC00618612 /* WeatherRouter.swift */,
+				903664C0279FB4B300618612 /* WeatherRouterImp.swift */,
 			);
 			path = Router;
 			sourceTree = "<group>";
@@ -405,7 +411,9 @@
 				9065C071279F3B2000A72A11 /* WeatherViewController.swift in Sources */,
 				9065C090279F429500A72A11 /* LocationService.swift in Sources */,
 				9065C051279F3A1B00A72A11 /* AppDelegate.swift in Sources */,
+				903664BF279FB4AC00618612 /* WeatherRouter.swift in Sources */,
 				90F05A60279F741700B5D8BB /* StringProtocol + extensions.swift in Sources */,
+				903664C1279FB4B300618612 /* WeatherRouterImp.swift in Sources */,
 				90F05A58279F725200B5D8BB /* IconsModel.swift in Sources */,
 				9065C08A279F419100A72A11 /* OWAPIEnum.swift in Sources */,
 				9065C08C279F41A800A72A11 /* QueryItemEnum.swift in Sources */,

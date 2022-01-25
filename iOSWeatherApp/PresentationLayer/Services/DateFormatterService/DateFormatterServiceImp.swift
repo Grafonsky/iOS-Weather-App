@@ -12,12 +12,24 @@ final class DateFormatterServiceImp: DateFormatterService {
     // MARK: - Protocols funcs
     
     func dailyDateFormatter(date: Double) -> String {
-        let givenDate = dateToString(date: NSDate(timeIntervalSince1970: TimeInterval(date)), format: "EEEE")
-        let currentDate = dateToString(date: NSDate.now as NSDate, format: "EEEE")
+        let format = "EEEE"
+        let givenDate = dateToString(date: NSDate(timeIntervalSince1970: TimeInterval(date)), format: format)
+        let currentDate = dateToString(date: NSDate.now as NSDate, format: format)
         if givenDate != currentDate {
             return givenDate
         }
         return "Today"
+    }
+    
+    func hourlyDateFormatter(date: Double) -> String {
+        let format = "HH:mm"
+        let givenDate = dateToString(date: NSDate(timeIntervalSince1970: TimeInterval(date)), format: format)
+        let currentDate = dateToString(date: NSDate.now as NSDate, format: format)
+        if givenDate.components(separatedBy: ":")[0] != currentDate.components(separatedBy: ":")[0] {
+            return givenDate
+        }
+        
+        return "Now"
     }
     
     // MARK: - Private funcs
