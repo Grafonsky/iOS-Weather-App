@@ -9,21 +9,16 @@ import Foundation
 
 final class StorageServiceImp: StorageService {
     
-    func uploadData(data: CustomWeatherModel) {
-        let defaults = UserDefaults.standard
-        let encoder = JSONEncoder()
-        if let encoded = try? encoder.encode(data) {
-            defaults.set(encoded, forKey: "weatherData")
-        }
+    let defaults = UserDefaults.standard
+    
+    // MARK: - Protocols funcs
+
+    func setData(key: String, value: Data?) {
+        defaults.set(value, forKey: key)
     }
     
-    func downloadData() -> CustomWeatherModel? {
-        let defaults = UserDefaults.standard
-        let decoder = JSONDecoder()
-        if let result = defaults.value(forKey: "weatherData") as? Data {
-            return try? decoder.decode(CustomWeatherModel.self, from: result)
-        }
-        return nil
+    func getData(key: String) -> Data {
+        defaults.data(forKey: key) ?? Data()
     }
     
 }

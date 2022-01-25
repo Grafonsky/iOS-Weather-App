@@ -8,6 +8,6 @@
 import Foundation
 
 protocol StorageService {
-    func uploadData(data: CustomWeatherModel)
-    func downloadData() -> CustomWeatherModel?
+    func setData(key: String, value: Data?)
+    func getData(key: String) -> Data
 }
