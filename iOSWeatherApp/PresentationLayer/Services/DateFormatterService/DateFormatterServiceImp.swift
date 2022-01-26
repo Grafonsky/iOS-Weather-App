@@ -11,6 +11,14 @@ final class DateFormatterServiceImp: DateFormatterService {
     
     // MARK: - Protocols funcs
     
+    func dateToString(date: NSDate, format: String) -> String {
+        let dateFormatter = DateFormatter()
+        let givenDate = dateFormatter.string(from: date as Date)
+        dateFormatter.dateFormat = format
+        let string = dateFormatter.string(from: date as Date)
+        return string
+    }
+    
     func dailyDateFormatter(date: Double) -> String {
         let format = "EEEE"
         let givenDate = dateToString(date: NSDate(timeIntervalSince1970: TimeInterval(date)), format: format)
@@ -31,16 +39,5 @@ final class DateFormatterServiceImp: DateFormatterService {
         
         return "Now"
     }
-    
-    // MARK: - Private funcs
-    
-    private func dateToString(date: NSDate, format: String) -> String {
-        let dateFormatter = DateFormatter()
-        let givenDate = dateFormatter.string(from: date as Date)
-        dateFormatter.dateFormat = format
-        let string = dateFormatter.string(from: date as Date)
-        return string
-
-    }
-    
+ 
 }

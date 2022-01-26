@@ -20,11 +20,11 @@ final class WeatherPresenterImp: WeatherPresenterInput {
     
     func viewIsReady() {
         interactor.locationAccessRequest()
-        interactor.getWeatherData()
+        interactor.checkConnection()
     }
     
-    func showChoosenCities() {
-        router.showChoosenCities()
+    func showFavorites() {
+        router.showFavorites()
     }
 }
 
@@ -33,5 +33,11 @@ final class WeatherPresenterImp: WeatherPresenterInput {
 extension WeatherPresenterImp: WeatherInteractorOutput {
     func updateWeather(entity: WeatherCustomEntity) {
         view?.setDataToUI(entity: entity)
+    }
+}
+
+extension WeatherPresenterImp: ModuleOuput {
+    func didUpdateModel(model: GeoModel) {
+        
     }
 }

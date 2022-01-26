@@ -10,6 +10,8 @@ import UIKit
 class RootViewController: UIViewController {
     private var current: UIViewController
     
+    // MARK: - Init
+    
     init() {
         self.current = WeatherViewController()
         super.init(nibName: nil, bundle: nil)
@@ -18,6 +20,8 @@ class RootViewController: UIViewController {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    // MARK: - ViewController life cycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,6 +32,8 @@ class RootViewController: UIViewController {
     }
     
 }
+
+    // MARK: - Extensions
 
 extension AppDelegate {
     static var shared: AppDelegate {

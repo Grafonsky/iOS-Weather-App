@@ -8,19 +8,20 @@
 import Foundation
 
 struct WeatherRawEntity: Codable {
+    let lat: Double
+    let lon: Double
     let current: Current
     let hourly: [Hourly]
     let daily: [Daily]
-//    var alerts: [Alerts]
 }
 
 struct Current: Codable {
     let temp: Double
     var feels_like: Double
-    let humidity: Double
+    let humidity: Int
     let wind_speed: Double
-    let sunrise: Double
-    let sunset: Double
+    let sunrise: Int
+    let sunset: Int
     let weather: [Weather]
 }
 

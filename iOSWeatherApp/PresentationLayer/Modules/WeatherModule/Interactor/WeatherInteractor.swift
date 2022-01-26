@@ -8,11 +8,11 @@
 import Foundation
 
 protocol WeatherInteractorInput {
-
     var output: WeatherInteractorOutput? { get set }
+    
     func locationAccessRequest()
-    func getWeatherData()
-
+    func checkConnection()
+    func getWeatherData(geoModel: GeoModel)
 }
 
 protocol WeatherInteractorOutput: AnyObject {

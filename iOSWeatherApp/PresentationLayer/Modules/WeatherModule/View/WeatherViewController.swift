@@ -47,14 +47,18 @@ class WeatherViewController: UIViewController {
     @IBOutlet weak var dailyTableView: UITableView!
     
     var presenter: WeatherPresenterInput!
-    var weatherEntity: WeatherCustomEntity!
+    var weatherEntity: WeatherCustomEntity?
 
     var dateFormatterService: DateFormatterService!
     
+    // MARK: - ViewController life cycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        config()
         presenter.viewIsReady()
+        config()
+        print(NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).last)
+
     }
     
     // MARK: - Configs
@@ -115,20 +119,21 @@ class WeatherViewController: UIViewController {
     }
     
     private func configDataToUI() {
-        cityNameLabel.text = weatherEntity.city
-        degreesLabel.text = "\(weatherEntity.currentTemp)°"
-        weatherDescLabel.text = weatherEntity.desc.firstUppercased
-        maxMinLabel.text = "Max.: \(weatherEntity.maxTemp)°, min.: \(weatherEntity.minTemp)°"
+        guard let unwrapEntity = weatherEntity else { return }
+        cityNameLabel.text = unwrapEntity.city
+        degreesLabel.text = "\(unwrapEntity.currentTemp)°"
+        weatherDescLabel.text = unwrapEntity.desc.firstUppercased
+        maxMinLabel.text = "H:\(unwrapEntity.maxTemp)° L:\(unwrapEntity.minTemp)°"
         alertDescLabel.text = "There's no danger"
-        feelsLikeDegreesLabel.text = "\(weatherEntity.feelsLike)°"
-        windSpeedLabel.text = "\(weatherEntity.windSpeed) m/s"
-        humidityDegreesLabel.text = "\(weatherEntity.humidity)%"
+        feelsLikeDegreesLabel.text = "\(unwrapEntity.feelsLike)°"
+        windSpeedLabel.text = "\(unwrapEntity.windSpeed) m/s"
+        humidityDegreesLabel.text = "\(unwrapEntity.humidity)%"
     }
     
     // MARK: - Actions
     
     @IBAction func ActionShowChoosenCities(_ sender: Any) {
-        presenter.showChoosenCities()
+        presenter.showFavorites()
     }
 }
 
@@ -146,24 +151,23 @@ extension WeatherViewController: WeatherPresenterOutput {
 extension WeatherViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         guard let entity = weatherEntity else { return 0 }
-        return entity.dailyForecast.count
+        return entity.dailyForecast.count - 1
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let forecast = weatherEntity.dailyForecast
+        guard let forecast = weatherEntity?.dailyForecast else { return UITableViewCell() }
         let daily = forecast[indexPath.row]
         if let cell = dailyTableView.dequeueReusableCell(withIdentifier: "DailyForecastCell", for: indexPath) as? DailyForecastCell {
             cell.backgroundColor = .clear
             cell.isUserInteractionEnabled = false
-            let dayOfWeek = weatherEntity.dailyForecast[indexPath.row]
             let icon = daily.weather[0].icon
             let iconsDict = WeatherIconsModel()
             guard let unwrapIcon = iconsDict.iconsDict[icon] else { return UITableViewCell() }
 
             cell.weatherIcon.image = UIImage(systemName: unwrapIcon)
-            cell.dayOfWeek.text = dateFormatterService.dailyDateFormatter(date: dayOfWeek.dt)
-            cell.dayTemp.text = "\(round(dayOfWeek.temp.max - 273.15))°"
-            cell.nightTemp.text = "\(round(dayOfWeek.temp.min - 273.15))°"
+            cell.dayOfWeek.text = dateFormatterService.dailyDateFormatter(date: daily.dt)
+            cell.dayTemp.text = "\(round(daily.temp.max - 273.15))°"
+            cell.nightTemp.text = "\(round(daily.temp.min - 273.15))°"
             return cell
         }
         return UITableViewCell()
@@ -172,7 +176,8 @@ extension WeatherViewController: UITableViewDelegate, UITableViewDataSource {
 
 extension WeatherViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if weatherEntity.hourlyForecast.count != 0 {
+        guard let count = weatherEntity?.hourlyForecast.count else { return 0 }
+        if count != 0 {
             return 24
         }
         return 0
@@ -181,7 +186,7 @@ extension WeatherViewController: UICollectionViewDelegate, UICollectionViewDataS
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if let cell = hourlyCollectionView.dequeueReusableCell(withReuseIdentifier: "HourlyForecastCell", for: indexPath) as? HourlyForecastCell {
             cell.backgroundColor = .clear
-            let hourly = weatherEntity.hourlyForecast[indexPath.row]
+            guard let hourly = weatherEntity?.hourlyForecast[indexPath.row] else { return UICollectionViewCell() }
             let temp = hourly.temp
             let icon = hourly.weather[0].icon
             let time = hourly.dt

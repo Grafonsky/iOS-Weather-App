@@ -30,7 +30,7 @@ final class WeatherServiceImp: WeatherService {
     
     // MARK: - Private funcs
     
-    func prepareRequest(lat: CLLocationDegrees, lon: CLLocationDegrees) -> URL? {
+    private func prepareRequest(lat: CLLocationDegrees, lon: CLLocationDegrees) -> URL? {
         var components = URLComponents(string: OWAPIEnum.url)
         components?.queryItems = [URLQueryItem(name: QueryItemEnum.lat, value: String(lat)),
                                   URLQueryItem(name: QueryItemEnum.lon, value: String(lon)),

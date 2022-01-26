@@ -8,7 +8,7 @@
 import Foundation
 
 protocol DateFormatterService {
+    func dateToString(date: NSDate, format: String) -> String
     func dailyDateFormatter(date: Double) -> String
     func hourlyDateFormatter(date: Double) -> String
-
 }

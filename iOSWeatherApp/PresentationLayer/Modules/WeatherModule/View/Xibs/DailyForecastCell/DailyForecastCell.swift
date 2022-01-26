@@ -13,6 +13,8 @@ class DailyForecastCell: UITableViewCell {
     @IBOutlet weak var nightTemp: UILabel!
     @IBOutlet weak var weatherIcon: UIImageView!
     
+    // MARK: - Life cycle
+
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

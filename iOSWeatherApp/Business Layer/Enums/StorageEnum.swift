@@ -8,7 +8,6 @@
 import Foundation
 
 enum StorageEnum {
-    static let locationStorageKey = "LocationStorageKey"
     static let weatherStorageKey = "WeatherStorageKey"
-    static let geoModelStorageKey = "GeoModelStorageKey"
+    static let favoritesStorageKey = "FavoritesStorageKey"
 }

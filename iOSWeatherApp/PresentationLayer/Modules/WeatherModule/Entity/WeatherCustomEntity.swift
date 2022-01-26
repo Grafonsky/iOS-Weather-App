@@ -9,16 +9,18 @@ import Foundation
 
 struct WeatherCustomEntity: Codable {
     var city: String
-    var currentTemp: String
-    var minTemp: String
-    var maxTemp: String
+    var lat: Double
+    var lon: Double
+    var currentTemp: Double
+    var minTemp: Double
+    var maxTemp: Double
     var alert: [Alerts]
     var desc: String
-    var feelsLike: String
-    var humidity: String
-    var windSpeed: String
-    var sunrise: String
-    var sunset: String
+    var feelsLike: Double
+    var humidity: Int
+    var windSpeed: Double
+    var sunrise: Int
+    var sunset: Int
     var hourlyForecast: [Hourly]
     var dailyForecast: [Daily]
     var icon: String

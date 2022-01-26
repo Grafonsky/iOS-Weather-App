@@ -9,5 +9,6 @@ import Foundation
 import CoreLocation
 
 protocol LocationService {
-    func getUserPosition(currentLocation: CLLocation, completion: @escaping (String, CLLocationDegrees, CLLocationDegrees) -> ())
+    func getPosition(currentLocation: CLLocation, completion: @escaping (String, CLLocationDegrees, CLLocationDegrees) -> ())
+    func getCityGeo(city: String, completion: @escaping (CLLocation) -> ())
 }
