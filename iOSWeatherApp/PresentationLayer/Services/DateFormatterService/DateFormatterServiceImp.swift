@@ -36,8 +36,7 @@ final class DateFormatterServiceImp: DateFormatterService {
         if givenDate.components(separatedBy: ":")[0] != currentDate.components(separatedBy: ":")[0] {
             return givenDate
         }
-        
         return "Now"
     }
- 
+    
 }

@@ -5,7 +5,7 @@
 //  Created by Bohdan Hawrylyshyn on 23.01.2022.
 //
 
-import Foundation
+import UIKit
 
 extension StringProtocol {
     var firstUppercased: String {

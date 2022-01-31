@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import SpriteKit
 
 class WeatherViewController: UIViewController {
     
@@ -29,7 +30,6 @@ class WeatherViewController: UIViewController {
     @IBOutlet weak var windSpeedView: UIVisualEffectView!
     @IBOutlet weak var windSpeedLabel: UILabel!
     
-    
     // Humidity outlets
     @IBOutlet weak var humidityView: UIVisualEffectView!
     @IBOutlet weak var humidityLabel: UILabel!
@@ -46,10 +46,14 @@ class WeatherViewController: UIViewController {
     @IBOutlet weak var DailyDayLabel: UILabel!
     @IBOutlet weak var dailyTableView: UITableView!
     
+    // SpriteKit
+    @IBOutlet weak var skView: SKView!
+    
     var presenter: WeatherPresenterInput!
     var weatherEntity: WeatherCustomEntity?
-
-    var dateFormatterService: DateFormatterService!
+    
+    var dateFormatterService: DateFormatterServiceImp!
+    var alertService: AlertServiceImp!
     
     // MARK: - ViewController life cycle
     
@@ -58,7 +62,7 @@ class WeatherViewController: UIViewController {
         presenter.viewIsReady()
         config()
         print(NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).last)
-
+        
     }
     
     // MARK: - Configs
@@ -72,6 +76,31 @@ class WeatherViewController: UIViewController {
         configCollectionView()
         dailyConfig()
         configTableView()
+    }
+    
+    private func configBackgroud(nodes: [String], gradient: [String]) {
+        let background = SKScene(size: view.frame.size)
+        skView.presentScene(background)
+        
+        guard let color1 = UIColor.init(hex: gradient[0]) else { return }
+        guard let color2 = UIColor.init(hex: gradient[1]) else { return }
+        
+        let texture = SKTexture(size: CGSize(width: view.frame.width, height: view.frame.height),
+                                color1: CIColor(color: color1),
+                                color2: CIColor(color: color2),
+                                direction: GradientDirection.up)
+        texture.filteringMode = .linear
+        let backgroundSprite = SKSpriteNode(texture: texture)
+        backgroundSprite.position = CGPoint(x: view.center.x, y: view.center.y)
+        backgroundSprite.size = view.frame.size
+        background.addChild(backgroundSprite)
+        
+        nodes.flatMap { [weak self] node in
+            guard let animation = SKSpriteNode(fileNamed: node) else { return }
+            background.addChild(animation)
+            animation.position = CGPoint(x: view.frame.width - 100, y: view.frame.height)
+        }
+        skView.fadeIn()
     }
     
     private func configAlert() {
@@ -130,6 +159,12 @@ class WeatherViewController: UIViewController {
         humidityDegreesLabel.text = "\(unwrapEntity.humidity)%"
     }
     
+    private func showNoWeatherModelAlert() {
+        alertService.noWeatherModel(vc: self,
+                                    withTitle: "No Internet Connection!",
+                                    message: "It's first time launching app, so we need an Internet connection to save weather at you location")
+    }
+    
     // MARK: - Actions
     
     @IBAction func ActionShowChoosenCities(_ sender: Any) {
@@ -137,9 +172,17 @@ class WeatherViewController: UIViewController {
     }
 }
 
-    // MARK: - Extensions
+// MARK: - Extensions
 
 extension WeatherViewController: WeatherPresenterOutput {
+    func noWeatherModel() {
+        showNoWeatherModelAlert()
+    }
+    
+    func setBackground(nodes: [String], gradient: [String]) {
+        configBackgroud(nodes: nodes, gradient: gradient)
+    }
+    
     func setDataToUI(entity: WeatherCustomEntity) {
         weatherEntity = entity
         configDataToUI()
@@ -163,7 +206,7 @@ extension WeatherViewController: UITableViewDelegate, UITableViewDataSource {
             let icon = daily.weather[0].icon
             let iconsDict = WeatherIconsModel()
             guard let unwrapIcon = iconsDict.iconsDict[icon] else { return UITableViewCell() }
-
+            
             cell.weatherIcon.image = UIImage(systemName: unwrapIcon)
             cell.dayOfWeek.text = dateFormatterService.dailyDateFormatter(date: daily.dt)
             cell.dayTemp.text = "\(round(daily.temp.max - 273.15))°"

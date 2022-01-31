@@ -14,13 +14,14 @@ final class WeatherRouterImp: NSObject, WeatherRouterInput {
     
     // MARK: - Protocol funcs
     
-    func showFavorites() {
-        guard let view = view, let controller = FavoritesAssembly.configFavoritesModule() else { return }
+    func showFavorites(output: ModuleOutput?) {
+        guard let view = view  else { return }
+        guard let controller = FavoritesAssembly.configFavoritesModule(output: output) else { return }
         controller.modalPresentationStyle = UIModalPresentationStyle.custom
         controller.transitioningDelegate = self
         view.present(controller, animated: true)
     }
-
+    
 }
 
 // MARK: - Extension

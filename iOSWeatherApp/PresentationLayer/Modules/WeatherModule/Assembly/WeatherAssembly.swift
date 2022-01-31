@@ -20,18 +20,22 @@ final class WeatherAssembly {
         let locationService = LocationServiceImp()
         let storageService = StorageServiceImp()
         let dateFormatterService = DateFormatterServiceImp()
+        let backgroundService = BackgroundServiceImp()
+        let alertService = AlertServiceImp()
         
         presenter.interactor = interactor
         presenter.view = controller
         presenter.router = router
         
         interactor.output = presenter
+        interactor.backgroundService = backgroundService
         interactor.weatherService = weatherService
         interactor.storageService = storageService
         interactor.locationService = locationService
         
         controller.presenter = presenter
         controller.dateFormatterService = dateFormatterService
+        controller.alertService = alertService
         
         router.view = controller
         

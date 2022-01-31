@@ -8,5 +8,5 @@
 import Foundation
 
 protocol WeatherRouterInput {
-    func showFavorites()
+    func showFavorites(output: ModuleOutput?)
 }

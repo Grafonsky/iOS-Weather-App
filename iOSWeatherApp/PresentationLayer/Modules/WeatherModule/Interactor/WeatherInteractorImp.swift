@@ -15,9 +15,11 @@ final class WeatherInteractorImp: NSObject, WeatherInteractorInput {
     var locationService: LocationServiceImp!
     var storageService: StorageServiceImp!
     var weatherService: WeatherServiceImp!
+    var backgroundService: BackgroundServiceImp!
     
     var locationManager = CLLocationManager()
     var currentLocation = CLLocation()
+    
     var isConnected: Bool = false
     
     // MARK: - Protocol funcs
@@ -45,24 +47,19 @@ final class WeatherInteractorImp: NSObject, WeatherInteractorInput {
     // MARK: - Private funcs
     
     private func saveEntity(entity: WeatherCustomEntity) {
-        let data = try? JSONEncoder().encode(entity)
+        let encoder = JSONEncoder()
+        let data = try? encoder.encode(entity)
         storageService.setData(key: StorageEnum.weatherStorageKey, value: data)
     }
     
     private func loadEntity() -> WeatherCustomEntity? {
-        let data = storageService.getData(key: StorageEnum.weatherStorageKey)
         let decoder = JSONDecoder()
+        let data = storageService.getData(key: StorageEnum.weatherStorageKey)
         let entity = try? decoder.decode(WeatherCustomEntity.self, from: data)
         return entity
     }
     
     private func configEntity(jsonData: WeatherRawEntity, geoModel: GeoModel) {
-        print("-----")
-        print(geoModel.city)
-        print(geoModel.lat)
-        print(geoModel.lon)
-        print("-----")
-
         let city = geoModel.city
         let lat = geoModel.lat
         let lon = geoModel.lon
@@ -96,6 +93,15 @@ final class WeatherInteractorImp: NSObject, WeatherInteractorInput {
             icon: icon)
         saveEntity(entity: entity)
         output?.updateWeather(entity: entity)
+        output?.updateBackground(
+            nodes: backgroundService.backgroundAnimations(entity: entity),
+            gradient: backgroundService.backgroundGradient(entity: entity))
+    }
+    
+    private func saveCurrentLocation(geoModel: GeoModel) {
+        let encoder = JSONEncoder()
+        let data = try? encoder.encode(geoModel)
+        storageService.setData(key: StorageEnum.currentLocation, value: data)
     }
     
 }
@@ -106,10 +112,19 @@ extension WeatherInteractorImp: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         if !locations.isEmpty {
             self.currentLocation = locations.first ?? CLLocation()
-            locationService.getPosition(currentLocation: currentLocation, completion: { [weak self] city, lat, lon in
-                let newGeoData = GeoModel.init(city: city, lat: lat, lon: lon)
-                self?.getWeatherData(geoModel: newGeoData)
-                self?.isConnected = true
+            locationService.getPosition(currentLocation: currentLocation, completion: { [weak self] city, lat, lon, error in
+                if error == nil {
+                    guard let city = city else { return }
+                    guard let lat = lat else { return }
+                    guard let lon = lon else { return }
+                    let newGeoData = GeoModel.init(city: city, lat: lat, lon: lon)
+                    self?.getWeatherData(geoModel: newGeoData)
+                    self?.saveCurrentLocation(geoModel: newGeoData)
+                    self?.isConnected = true
+                } else {
+                    self?.output?.noWeatherModelAlert()
+                }
+             
             })
         }
     }

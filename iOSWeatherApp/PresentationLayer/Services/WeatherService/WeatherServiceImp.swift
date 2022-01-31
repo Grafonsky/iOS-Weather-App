@@ -38,7 +38,6 @@ final class WeatherServiceImp: WeatherService {
                                   URLQueryItem(name: QueryItemEnum.units, value: QueryItemEnum.units),
                                   URLQueryItem(name: QueryItemEnum.appid, value: OWAPIEnum.apiKey)
         ]
-        print("[REQUEST URL] >> \(components?.url)")
         return components?.url
     }
     

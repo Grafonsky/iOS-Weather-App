@@ -6,44 +6,68 @@
 //
 
 import Foundation
+import CoreLocation
 
 final class FavoritesInteractorImp: FavoritesInteractorInput {
     
     weak var output: FavoritesInteractorOutput?
     
     var storageService: StorageServiceImp!
-    var dateFormatterService: DateFormatterService!
+    var backgroundService: BackgroundServiceImp!
+    var dateFormatterService: DateFormatterServiceImp!
     var locationService: LocationServiceImp!
     var weatherService: WeatherServiceImp!
-            
+    
+    var locationsGeo: [GeoModel] = []
+    var locationsList: [LocationModel] = []
+    var animations: [CellsAnimationModel] = []
+    
     //MARK: - Protocol funcs
     
     func loadEntity() {
-        var locations: [LocationModel] = []
-        let favorites: [LocationModel] = loadLocations().locations
-        guard let currentLocation = aboutCurrentLocation() else { return }
-        locations.append(currentLocation)
-        locations.append(contentsOf: favorites)
-        output?.updateLocations(locations: locations)
+        loadCitiesData()
+        
     }
     
     func addNewCity(city: String) {
-        locationService.getCityGeo(city: city) { [weak self] geo in
-            print(geo)
-            self?.locationService.getPosition(currentLocation: geo) { [weak self] city, lat, lon in
-                print(city)
-                let geoModel = GeoModel.init(city: city, lat: lat, lon: lon)
-                self?.weatherService.loadWeatherData(lat: geoModel.lat, lon: geoModel.lon) { [weak self] jsonData in
-                    DispatchQueue.main.async {
-                        guard var locations: FavoritesEntity = self?.loadLocations() else { return }
+        locationService.getCityGeo(city: city) { [weak self] geo, error in
+            if error == nil {
+                guard let geo = geo else { return }
+                self?.locationService.getPosition(currentLocation: geo) { [weak self] city, lat, lon, error in
+                    guard let city = city else { return }
+                    guard let lat = lat else { return }
+                    guard let lon = lon else { return }
+                    let geoModel = GeoModel.init(city: city, lat: lat, lon: lon)
+                    self?.locationsGeo.append(geoModel)
+                    self?.weatherService.loadWeatherData(lat: geoModel.lat, lon: geoModel.lon) { [weak self] jsonData in
                         guard let newCity = self?.configModel(jsonData: jsonData, geoModel: geoModel)  else { return }
-                        locations.locations.append(newCity)
-                        self?.saveLocations(locations: locations)
-                        self?.loadEntity()
+                        self?.locationsList.append(newCity)
+                        self?.saveLocations()
+                        guard let nodes = self?.backgroundService.searchResultsAnimations(entity: newCity) else { return }
+                        guard let gradient = self?.backgroundService.searchResultsGradient(entity: newCity) else { return }
+                        self?.animations.append(CellsAnimationModel.init(nodes: nodes, gradient: gradient))
+                        self?.output?.updateLocations(locations: self!.locationsList)
+                        self?.output?.updateBackground(animations: self!.animations)
                     }
                 }
+            } else {
+                self?.noCityResult()
             }
         }
+    }
+    
+    func configGeoModel(city: String, lat: Double, lon: Double) {
+        let geoModel = GeoModel.init(city: city, lat: lat, lon: lon)
+        output?.updateGeoModel(model: geoModel)
+    }
+    
+    func removeCity(index: Int) {
+        locationsList.remove(at: index)
+        locationsGeo.remove(at: index)
+        animations.remove(at: index)
+        saveLocations()
+        output?.updateLocations(locations: locationsList)
+        output?.updateBackground(animations: animations)
     }
     
     //MARK: - Private funcs
@@ -57,6 +81,7 @@ final class FavoritesInteractorImp: FavoritesInteractorInput {
         let temp = jsonData.current.temp
         let minTemp = jsonData.daily[0].temp.min
         let maxTemp = jsonData.daily[0].temp.max
+        let icon = jsonData.current.weather[0].icon
         let model = LocationModel.init(
             cityName: cityName,
             lat: lat,
@@ -65,23 +90,61 @@ final class FavoritesInteractorImp: FavoritesInteractorInput {
             weatherDesc: weatherDesc,
             temp: temp,
             minTemp: minTemp,
-            maxTemp: maxTemp)
+            maxTemp: maxTemp,
+            icon: icon)
         return model
     }
     
-    private func loadLocations() -> FavoritesEntity {
-        let data = storageService.getData(key: StorageEnum.favoritesStorageKey)
-        let decoder = JSONDecoder()
-        guard let entity = try? decoder.decode(FavoritesEntity.self, from: data) else { return FavoritesEntity.init(locations: []) }
-        return entity
+    private func loadCitiesData() {
+        animations = []
+        locationsList = []
+        locationsGeo = []
+        
+        locationsGeo = loadLocations()
+        if locationsGeo.isEmpty {
+            locationsGeo.append(loadCurrentLocation())
+        } else {
+            locationsGeo[0] = loadCurrentLocation()
+        }
+        locationsGeo.flatMap { geoModel in
+            self.weatherService.loadWeatherData(lat: geoModel.lat, lon: geoModel.lon) { jsonData in
+                let favoriteCity = self.configModel(jsonData: jsonData, geoModel: geoModel)
+                let nodes = self.backgroundService.searchResultsAnimations(entity: favoriteCity)
+                let gradient = self.backgroundService.searchResultsGradient(entity: favoriteCity)
+                
+                self.locationsList.append(favoriteCity)
+                self.animations.append(CellsAnimationModel.init(nodes: nodes, gradient: gradient))
+                
+                self.output?.updateLocations(locations: self.locationsList)
+                self.output?.updateBackground(animations: self.animations)
+            }
+        }
     }
     
-    private func saveLocations(locations: FavoritesEntity) {
-        let data = try? JSONEncoder().encode(locations)
+    private func noCityResult() {
+        output?.noCityResult()
+    }
+    
+    private func loadLocations() -> [GeoModel] {
+        let decoder = JSONDecoder()
+        let data = storageService.getData(key: StorageEnum.favoritesStorageKey)
+        guard let locations = try? decoder.decode([GeoModel].self, from: data) else { return [] }
+        return locations
+    }
+    
+    private func loadCurrentLocation() -> GeoModel {
+        let decoder = JSONDecoder()
+        let data = storageService.getData(key: StorageEnum.currentLocation)
+        guard let geoModel = try? decoder.decode(GeoModel.self, from: data) else { return GeoModel.init(city: "", lat: 0, lon: 0) }
+        return geoModel
+    }
+    
+    private func saveLocations() {
+        let data = try? JSONEncoder().encode(locationsGeo)
         storageService.setData(key: StorageEnum.favoritesStorageKey, value: data)
     }
     
-    private func aboutCurrentLocation() -> LocationModel? {
+    private func configCurrentModel() -> LocationModel? {
         let data = storageService.getData(key: StorageEnum.weatherStorageKey)
         let decoder = JSONDecoder()
         guard let entity = try? decoder.decode(WeatherCustomEntity.self, from: data) else { return nil }
@@ -93,7 +156,8 @@ final class FavoritesInteractorImp: FavoritesInteractorInput {
             weatherDesc: entity.desc,
             temp: entity.currentTemp,
             minTemp: entity.minTemp,
-            maxTemp: entity.maxTemp)
+            maxTemp: entity.maxTemp,
+            icon: entity.icon)
         return current
     }
     

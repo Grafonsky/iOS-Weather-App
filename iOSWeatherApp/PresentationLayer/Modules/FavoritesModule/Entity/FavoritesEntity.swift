@@ -20,4 +20,5 @@ struct LocationModel: Codable {
     var temp: Double
     var minTemp: Double
     var maxTemp: Double
+    var icon: String
 }

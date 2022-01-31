@@ -15,5 +15,7 @@ protocol WeatherPresenterInput {
 
 protocol WeatherPresenterOutput: AnyObject {
     func setDataToUI(entity: WeatherCustomEntity)
+    func setBackground(nodes: [String], gradient: [String])
+    func noWeatherModel()
 }
 

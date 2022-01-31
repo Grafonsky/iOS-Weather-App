@@ -8,9 +8,10 @@
 import Foundation
 
 final class WeatherPresenterImp: WeatherPresenterInput {
+    internal var model: GeoModel?
     
     weak var view: WeatherPresenterOutput?
-
+    
     var storageService: StorageServiceImp!
     
     var interactor: WeatherInteractorInput!
@@ -24,20 +25,28 @@ final class WeatherPresenterImp: WeatherPresenterInput {
     }
     
     func showFavorites() {
-        router.showFavorites()
+        router.showFavorites(output: self)
     }
 }
 
 //MARK: - Extensions
 
 extension WeatherPresenterImp: WeatherInteractorOutput {
+    func noWeatherModelAlert() {
+        view?.noWeatherModel()
+    }
+    
+    func updateBackground(nodes: [String], gradient: [String]) {
+        view?.setBackground(nodes: nodes, gradient: gradient)
+    }
+    
     func updateWeather(entity: WeatherCustomEntity) {
         view?.setDataToUI(entity: entity)
     }
 }
 
-extension WeatherPresenterImp: ModuleOuput {
+extension WeatherPresenterImp: ModuleOutput {
     func didUpdateModel(model: GeoModel) {
-        
+        interactor.getWeatherData(geoModel: model)
     }
 }

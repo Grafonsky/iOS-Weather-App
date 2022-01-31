@@ -33,7 +33,7 @@ class RootViewController: UIViewController {
     
 }
 
-    // MARK: - Extensions
+// MARK: - Extensions
 
 extension AppDelegate {
     static var shared: AppDelegate {

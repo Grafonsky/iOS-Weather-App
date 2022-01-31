@@ -3,19 +3,21 @@
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
-        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" rowHeight="105" id="8u0-f4-TtM" customClass="CityCell" customModule="iOSWeatherApp" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="414" height="98"/>
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="8u0-f4-TtM" customClass="CityCell" customModule="iOSWeatherApp" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="414" height="105"/>
             <autoresizingMask key="autoresizingMask"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="8u0-f4-TtM" id="NFB-NA-Cte">
-                <rect key="frame" x="0.0" y="0.0" width="414" height="98"/>
+                <rect key="frame" x="0.0" y="0.0" width="414" height="105"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
+                    <skView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="163-rD-x4g">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="105"/>
+                    </skView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="My Location" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DD3-RS-Zxi">
                         <rect key="frame" x="20" y="10" width="122" height="26.5"/>
                         <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="22"/>
@@ -25,13 +27,13 @@
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Volgograd" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="koE-Fv-Oxv">
                         <rect key="frame" x="20" y="41.5" width="70.5" height="18"/>
                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                        <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Snow showers" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RvY-Rm-3Jl">
-                        <rect key="frame" x="20" y="70" width="98.5" height="18"/>
+                        <rect key="frame" x="20" y="77" width="98.5" height="18"/>
                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                        <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="-6°" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="D4k-p2-uRQ">
@@ -41,19 +43,23 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="H:-4° L:-8°" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2Ud-eE-kc2">
-                        <rect key="frame" x="320" y="71" width="74" height="17"/>
+                        <rect key="frame" x="320" y="78" width="74" height="17"/>
                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <nil key="highlightedColor"/>
                     </label>
                 </subviews>
-                <color key="backgroundColor" systemColor="systemIndigoColor"/>
+                <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                 <constraints>
+                    <constraint firstItem="163-rD-x4g" firstAttribute="top" secondItem="NFB-NA-Cte" secondAttribute="top" id="5ST-aB-4bt"/>
                     <constraint firstItem="DD3-RS-Zxi" firstAttribute="top" secondItem="NFB-NA-Cte" secondAttribute="top" constant="10" id="Bj7-VK-2wu"/>
+                    <constraint firstAttribute="trailing" secondItem="163-rD-x4g" secondAttribute="trailing" id="DIR-b8-dKl"/>
                     <constraint firstItem="koE-Fv-Oxv" firstAttribute="leading" secondItem="NFB-NA-Cte" secondAttribute="leading" constant="20" id="KI7-JK-ld8"/>
                     <constraint firstAttribute="trailing" secondItem="D4k-p2-uRQ" secondAttribute="trailing" constant="20" id="O0K-ZP-sVa"/>
                     <constraint firstAttribute="bottom" secondItem="2Ud-eE-kc2" secondAttribute="bottom" constant="10" id="TT1-eM-rRo"/>
+                    <constraint firstAttribute="bottom" secondItem="163-rD-x4g" secondAttribute="bottom" id="V3r-3J-IVP"/>
                     <constraint firstItem="D4k-p2-uRQ" firstAttribute="top" secondItem="NFB-NA-Cte" secondAttribute="top" constant="10" id="baN-qq-cAz"/>
+                    <constraint firstItem="163-rD-x4g" firstAttribute="leading" secondItem="NFB-NA-Cte" secondAttribute="leading" id="cKb-fS-Izf"/>
                     <constraint firstItem="DD3-RS-Zxi" firstAttribute="leading" secondItem="NFB-NA-Cte" secondAttribute="leading" constant="20" id="l1F-x4-O02"/>
                     <constraint firstItem="RvY-Rm-3Jl" firstAttribute="leading" secondItem="NFB-NA-Cte" secondAttribute="leading" constant="20" id="lRn-KR-TNm"/>
                     <constraint firstAttribute="trailing" secondItem="2Ud-eE-kc2" secondAttribute="trailing" constant="20" id="v6U-TU-fC6"/>
@@ -61,20 +67,16 @@
                     <constraint firstAttribute="bottom" secondItem="RvY-Rm-3Jl" secondAttribute="bottom" constant="10" id="zhY-rY-Iff"/>
                 </constraints>
             </tableViewCellContentView>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <connections>
-                <outlet property="back" destination="NFB-NA-Cte" id="5A6-PX-ruf"/>
                 <outlet property="maxMinLabel" destination="2Ud-eE-kc2" id="dbc-ww-rzH"/>
+                <outlet property="skView" destination="163-rD-x4g" id="glz-9X-ejX"/>
                 <outlet property="subTitleLabel" destination="koE-Fv-Oxv" id="zMo-k0-CoW"/>
                 <outlet property="tempLabel" destination="D4k-p2-uRQ" id="qZm-nQ-4qq"/>
                 <outlet property="titleLabel" destination="DD3-RS-Zxi" id="bHm-qk-yFl"/>
                 <outlet property="weatherLabel" destination="RvY-Rm-3Jl" id="bJ2-dC-2KN"/>
             </connections>
-            <point key="canvasLocation" x="-3804.347826086957" y="-685.04464285714278"/>
+            <point key="canvasLocation" x="-3804.347826086957" y="-685.37946428571422"/>
         </tableViewCell>
     </objects>
-    <resources>
-        <systemColor name="systemIndigoColor">
-            <color red="0.34509803921568627" green="0.33725490196078434" blue="0.83921568627450982" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
-    </resources>
 </document>

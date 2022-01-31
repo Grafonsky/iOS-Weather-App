@@ -5,6 +5,6 @@
 //  Created by Bohdan Hawrylyshyn on 26.01.2022.
 //
 
-protocol ModuleOuput: AnyObject {
+protocol ModuleOutput: AnyObject {
     func didUpdateModel(model: GeoModel)
 }

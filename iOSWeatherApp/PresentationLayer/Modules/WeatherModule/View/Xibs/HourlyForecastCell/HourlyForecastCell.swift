@@ -13,10 +13,10 @@ class HourlyForecastCell: UICollectionViewCell {
     @IBOutlet weak var degreesLabel: UILabel!
     
     // MARK: - Life cycle
-
+    
     override func awakeFromNib() {
         super.awakeFromNib()
-
+        
     }
-
+    
 }

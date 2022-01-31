@@ -17,5 +17,7 @@ protocol WeatherInteractorInput {
 
 protocol WeatherInteractorOutput: AnyObject {
     func updateWeather(entity: WeatherCustomEntity)
+    func updateBackground(nodes: [String], gradient: [String])
+    func noWeatherModelAlert()
 }
 
