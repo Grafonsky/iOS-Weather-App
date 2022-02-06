@@ -99,9 +99,7 @@ final class WeatherInteractorImp: NSObject, WeatherInteractorInput {
     }
     
     private func saveCurrentLocation(geoModel: GeoModel) {
-        let encoder = JSONEncoder()
-        let data = try? encoder.encode(geoModel)
-        storageService.setData(key: StorageEnum.currentLocation, value: data)
+        storageService.saveWeatherModel(model: geoModel)
     }
     
 }
@@ -124,7 +122,7 @@ extension WeatherInteractorImp: CLLocationManagerDelegate {
                 } else {
                     self?.output?.noWeatherModelAlert()
                 }
-             
+                
             })
         }
     }

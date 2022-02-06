@@ -10,7 +10,3 @@ import Foundation
 protocol FavoritesRouterInput {
     func dismissScreen(output: ModuleOutput)
 }
-
-protocol FavoritesRouterOutput {
-    
-}

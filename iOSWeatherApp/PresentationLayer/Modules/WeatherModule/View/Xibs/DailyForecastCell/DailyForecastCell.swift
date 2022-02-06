@@ -17,7 +17,7 @@ class DailyForecastCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
+        
     }
     
 }

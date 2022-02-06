@@ -9,6 +9,8 @@ import UIKit
 
 final class AlertServiceImp: AlertService {
     
+    // MARK: - Protocols funcs
+    
     func noWeatherModel(vc: UIViewController, withTitle title: String, message: String) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: {_ in
@@ -22,5 +24,5 @@ final class AlertServiceImp: AlertService {
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
         vc.present(alert, animated: true)
     }
-
+    
 }

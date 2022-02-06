@@ -61,7 +61,6 @@ class WeatherViewController: UIViewController {
         super.viewDidLoad()
         presenter.viewIsReady()
         config()
-        print(NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).last)
         
     }
     

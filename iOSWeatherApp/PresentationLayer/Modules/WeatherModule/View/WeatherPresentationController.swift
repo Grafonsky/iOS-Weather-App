@@ -12,6 +12,8 @@ class WeatherPresentationController: UIPresentationController {
     let blurEffectView: UIVisualEffectView!
     var tapGestureRecognizer: UITapGestureRecognizer = UITapGestureRecognizer()
     
+    // MARK: - Config funcs
+    
     override init(presentedViewController: UIViewController, presenting presentingViewController: UIViewController?) {
         let blurEffect = UIBlurEffect(style: .dark)
         blurEffectView = UIVisualEffectView(effect: blurEffect)
@@ -60,6 +62,8 @@ class WeatherPresentationController: UIPresentationController {
         self.presentedViewController.dismiss(animated: true, completion: nil)
     }
 }
+
+// MARK: - Extensions
 
 extension UIView {
     func roundCorners(_ corners: UIRectCorner, radius: CGFloat) {

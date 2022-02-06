@@ -10,4 +10,7 @@ import Foundation
 protocol StorageService {
     func setData(key: String, value: Data?)
     func getData(key: String) -> Data
+    
+    func saveWeatherModel(model: GeoModel)
+    func getWeatherModel() -> GeoModelEntity?
 }

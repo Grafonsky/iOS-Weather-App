@@ -101,10 +101,11 @@ final class FavoritesInteractorImp: FavoritesInteractorInput {
         locationsGeo = []
         
         locationsGeo = loadLocations()
+        guard let currentLocation = loadCurrentLocation() else { return }
         if locationsGeo.isEmpty {
-            locationsGeo.append(loadCurrentLocation())
+            locationsGeo.append(currentLocation)
         } else {
-            locationsGeo[0] = loadCurrentLocation()
+            locationsGeo[0] = currentLocation
         }
         locationsGeo.flatMap { geoModel in
             self.weatherService.loadWeatherData(lat: geoModel.lat, lon: geoModel.lon) { jsonData in
@@ -132,11 +133,12 @@ final class FavoritesInteractorImp: FavoritesInteractorInput {
         return locations
     }
     
-    private func loadCurrentLocation() -> GeoModel {
-        let decoder = JSONDecoder()
-        let data = storageService.getData(key: StorageEnum.currentLocation)
-        guard let geoModel = try? decoder.decode(GeoModel.self, from: data) else { return GeoModel.init(city: "", lat: 0, lon: 0) }
-        return geoModel
+    private func loadCurrentLocation() -> GeoModel? {
+        let loadedModel = storageService.getWeatherModel()
+        guard let city = loadedModel?.city else { return nil }
+        guard let lat = loadedModel?.lat else { return nil }
+        guard let lon = loadedModel?.lon else { return nil }
+        return GeoModel.init(city: city, lat: lat, lon: lon)
     }
     
     private func saveLocations() {
