@@ -1,20 +1,14 @@
 # iOS_Weather_App
 
-#### Основное
-- Приложение должно обновлять данные при перезаходе или переоткрытии приложения. 
-- Дизайн - произвольный, но очень желательно ориентироваться на стандартные погодные приложения (Weather iOS)
-- Должно быть предусмотренна возможность изменять город.
-- Приложение должно быть написанно с использованием современных архитектур и архитектурных паттернов (MVP, MVVM, Viper)
-- Разбить бизнес логику на слои по принциму сервисной архитектуры. 
-- Написать тесты на сервисы в приложении.
+## Features
+- VIPER architecture
+- Detecting current location by CoreLocation
+- Possibility to watch the weather by city
+- Caching previously loaded weather data
+- Animated backgrounds by SpriteKit
 
-#### Все еще в процессе
-- Приложение должно обрабатывать случай, когда нет интернета, то есть погода должна кешироваться. 
-- Написать тесты на сервисы в приложении.
-
+## Screenshots
 <p align="center">
-  <img width="250" alt="Screenshot 2021-09-29 at 00 21 27" src="https://user-images.githubusercontent.com/44808549/148796035-a60f7667-18d6-4988-99f6-d96955ede2e4.png">
-  <img width="250" alt="Screenshot 2021-09-29 at 00 21 27" src="https://user-images.githubusercontent.com/44808549/148796061-6d220588-7a60-4034-b662-cac07bd7e105.png">
+  <img width="250" alt="Screenshot 2021-09-29 at 00 21 27" src="https://user-images.githubusercontent.com/44808549/152878526-20eb0243-32b5-4810-a5b3-c501da2c753b.png">
+  <img width="250" alt="Screenshot 2021-09-29 at 00 21 27" src="https://user-images.githubusercontent.com/44808549/152878898-a4fb6a9c-81c7-4c8b-8631-07397aa8e051.png">
 </p>
-
-
