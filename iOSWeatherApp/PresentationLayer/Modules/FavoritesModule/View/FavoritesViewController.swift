@@ -118,8 +118,7 @@ extension FavoritesViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            print([indexPath])
-            presenter.removeCity(index: indexPath.row)
+            presenter.removeCity(index: indexPath.row - 1)
         }
     }
     

@@ -6,7 +6,7 @@
 //
 
 enum OWAPIEnum {
-    static let apiKey = "c75ed411f9680fe8c45190fa328d2307"
+    static let apiKey = "21ab5af043dced2b4111a3a29a5f7097"
     static let url = "https://api.openweathermap.org/data/2.5/onecall?"
 }
 

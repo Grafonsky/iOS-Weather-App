@@ -26,7 +26,6 @@ final class FavoritesInteractorImp: FavoritesInteractorInput {
     
     func loadEntity() {
         loadCitiesData()
-        
     }
     
     func addNewCity(city: String) {
@@ -62,12 +61,9 @@ final class FavoritesInteractorImp: FavoritesInteractorInput {
     }
     
     func removeCity(index: Int) {
-        locationsList.remove(at: index)
         locationsGeo.remove(at: index)
-        animations.remove(at: index)
         saveLocations()
-        output?.updateLocations(locations: locationsList)
-        output?.updateBackground(animations: animations)
+        loadCitiesData()
     }
     
     //MARK: - Private funcs
@@ -98,24 +94,23 @@ final class FavoritesInteractorImp: FavoritesInteractorInput {
     private func loadCitiesData() {
         animations = []
         locationsList = []
-        locationsGeo = []
-        
-        locationsGeo = loadLocations()
-        guard let currentLocation = loadCurrentLocation() else { return }
-        if locationsGeo.isEmpty {
-            locationsGeo.append(currentLocation)
-        } else {
-            locationsGeo[0] = currentLocation
-        }
-        locationsGeo.flatMap { geoModel in
-            self.weatherService.loadWeatherData(lat: geoModel.lat, lon: geoModel.lon) { jsonData in
-                let favoriteCity = self.configModel(jsonData: jsonData, geoModel: geoModel)
-                let nodes = self.backgroundService.searchResultsAnimations(entity: favoriteCity)
-                let gradient = self.backgroundService.searchResultsGradient(entity: favoriteCity)
-                
-                self.locationsList.append(favoriteCity)
-                self.animations.append(CellsAnimationModel.init(nodes: nodes, gradient: gradient))
-                
+        locationsGeo = loadGeoModels()
+        DispatchQueue.global().sync {
+            DispatchQueue.global().sync {
+                self.configCurrentLocation()
+            }
+            DispatchQueue.global().sync {
+                locationsGeo.forEach { geoModel in
+                    self.weatherService.loadWeatherData(lat: geoModel.lat, lon: geoModel.lon) { jsonData in
+                        let favoriteCity = self.configModel(jsonData: jsonData, geoModel: geoModel)
+                        let nodes = self.backgroundService.searchResultsAnimations(entity: favoriteCity)
+                        let gradient = self.backgroundService.searchResultsGradient(entity: favoriteCity)
+                        self.locationsList.append(favoriteCity)
+                        self.animations.append(CellsAnimationModel.init(nodes: nodes, gradient: gradient))
+                    }
+                }
+            }
+            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.7) {
                 self.output?.updateLocations(locations: self.locationsList)
                 self.output?.updateBackground(animations: self.animations)
             }
@@ -126,19 +121,30 @@ final class FavoritesInteractorImp: FavoritesInteractorInput {
         output?.noCityResult()
     }
     
-    private func loadLocations() -> [GeoModel] {
+    private func loadGeoModels() -> [GeoModel] {
         let decoder = JSONDecoder()
         let data = storageService.getData(key: StorageEnum.favoritesStorageKey)
         guard let locations = try? decoder.decode([GeoModel].self, from: data) else { return [] }
         return locations
     }
     
-    private func loadCurrentLocation() -> GeoModel? {
+    private func loadCurrentGeoModel() -> GeoModel? {
         let loadedModel = storageService.getWeatherModel()
         guard let city = loadedModel?.city else { return nil }
         guard let lat = loadedModel?.lat else { return nil }
         guard let lon = loadedModel?.lon else { return nil }
         return GeoModel.init(city: city, lat: lat, lon: lon)
+    }
+    
+    private func configCurrentLocation() {
+        guard let currentGeoModel = loadCurrentGeoModel() else { return }
+        self.weatherService.loadWeatherData(lat: currentGeoModel.lat, lon: currentGeoModel.lon) { jsonData in
+            let current = self.configModel(jsonData: jsonData, geoModel: currentGeoModel)
+            let nodes = self.backgroundService.searchResultsAnimations(entity: current)
+            let gradient = self.backgroundService.searchResultsGradient(entity: current)
+            self.locationsList.insert(current, at: 0)
+            self.animations.insert(CellsAnimationModel.init(nodes: nodes, gradient: gradient), at: 0)
+        }
     }
     
     private func saveLocations() {

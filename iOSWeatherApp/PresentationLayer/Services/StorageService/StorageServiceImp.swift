@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import CoreData
 
 final class StorageServiceImp: StorageService {
     
@@ -23,6 +24,7 @@ final class StorageServiceImp: StorageService {
     }
     
     func saveWeatherModel(model: GeoModel) {
+        clearCoreDataValues()
         let newModel = GeoModelEntity(context: context)
         newModel.city = model.city
         newModel.lat = model.lat
@@ -34,7 +36,19 @@ final class StorageServiceImp: StorageService {
     
     func getWeatherModel() -> GeoModelEntity? {
         guard let model = try? context.fetch(GeoModelEntity.fetchRequest()) else { return nil }
-        return model.first
+        return model.last
+    }
+    
+    // MARK: - Private funcs
+    
+    private func clearCoreDataValues() {
+        let fetchRequest: NSFetchRequest<NSFetchRequestResult> = NSFetchRequest(entityName: "GeoModelEntity")
+        let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
+        do {
+            try? context.execute(deleteRequest)
+        } catch let error as NSError {
+            print(error)
+        }
     }
     
 }
