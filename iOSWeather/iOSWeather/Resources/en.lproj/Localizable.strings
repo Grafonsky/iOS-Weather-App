@@ -1,14 +1,12 @@
 /* 
-  Localizable.strings
-  iOSWeather
-
-  Created by Bohdan Hawrylyshyn on 9.10.2022.
-  
-*/
+ Localizable.strings
+ iOSWeather
+ 
+ Created by Bohdan Hawrylyshyn on 9.10.2022.
+ 
+ */
 
 // MARK: - v2.0
 
-"feelsLike"         = "Feels like";
-"humidity"          = "Humidity";
-"visibility"        = "Visibility";
-"precipitation"     = "Precipitation";
+"weather"   = "Weather";
+"cities"    = "Cities";
