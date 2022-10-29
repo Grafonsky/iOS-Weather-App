@@ -9,12 +9,6 @@ import SwiftUI
 
 struct WeatherView: View {
     
-    @State var locator: LocationService
-    
-    init(locator: LocationService) {
-        self.locator = locator
-    }
-    
     var body: some View {
         VStack {
             Text("123")
@@ -24,6 +18,6 @@ struct WeatherView: View {
 
 struct WeatherView_Previews: PreviewProvider {
     static var previews: some View {
-        WeatherView(locator: .init())
+        WeatherView()
     }
 }
