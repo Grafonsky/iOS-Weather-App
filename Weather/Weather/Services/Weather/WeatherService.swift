@@ -29,7 +29,6 @@ final class WeatherService: HTTPClient {
         let result = await getTemp(lat: location.lat, lon: location.lon)
         switch result {
         case .success(let weather):
-            print("☁️ Current weather data:\n")
             return .success(weather)
         case .failure(let error):
             return .failure(.network(error))
@@ -44,10 +43,10 @@ private extension WeatherService {
             endpoint: WeatherEndpoint.current(lat: lat, lon: lon),
             responseModel: WeatherModel.self)
         switch result {
-        case .success(let model):
+        case .success(let weather):
             let weatherData: WeatherData = .init(
                 city: locationService.currentCity,
-                weatherModel: model)
+                weatherModel: weather)
             return .success(weatherData)
         case .failure(let error):
             return .failure(error)
