@@ -19,6 +19,8 @@
 		90C0466D290D714600F5C9B1 /* WeatherServiceError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90C0466C290D714600F5C9B1 /* WeatherServiceError.swift */; };
 		90C0466F290D73E900F5C9B1 /* WeatherData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90C0466E290D73E900F5C9B1 /* WeatherData.swift */; };
 		90C04671290D75BD00F5C9B1 /* WeatherEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90C04670290D75BD00F5C9B1 /* WeatherEndpoint.swift */; };
+		90C04674290D82B500F5C9B1 /* WeatherViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90C04673290D82B500F5C9B1 /* WeatherViewModel.swift */; };
+		90C04676290E713A00F5C9B1 /* DateFormatterService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90C04675290E713A00F5C9B1 /* DateFormatterService.swift */; };
 		90E18C92290C529D00A41760 /* WeatherApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90E18C91290C529D00A41760 /* WeatherApp.swift */; };
 		90E18C96290C529F00A41760 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 90E18C95290C529F00A41760 /* Assets.xcassets */; };
 		90E18C99290C529F00A41760 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 90E18C98290C529F00A41760 /* Preview Assets.xcassets */; };
@@ -39,6 +41,8 @@
 		90C0466C290D714600F5C9B1 /* WeatherServiceError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherServiceError.swift; sourceTree = "<group>"; };
 		90C0466E290D73E900F5C9B1 /* WeatherData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherData.swift; sourceTree = "<group>"; };
 		90C04670290D75BD00F5C9B1 /* WeatherEndpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherEndpoint.swift; sourceTree = "<group>"; };
+		90C04673290D82B500F5C9B1 /* WeatherViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherViewModel.swift; sourceTree = "<group>"; };
+		90C04675290E713A00F5C9B1 /* DateFormatterService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFormatterService.swift; sourceTree = "<group>"; };
 		90E18C8E290C529D00A41760 /* Weather.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Weather.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		90E18C91290C529D00A41760 /* WeatherApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherApp.swift; sourceTree = "<group>"; };
 		90E18C95290C529F00A41760 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -73,6 +77,7 @@
 				90C0466B290D712B00F5C9B1 /* Weather */,
 				90C04659290D3DA300F5C9B1 /* LocationService.swift */,
 				90C0465B290D463D00F5C9B1 /* AccessLocationService.swift */,
+				90C04675290E713A00F5C9B1 /* DateFormatterService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -107,6 +112,14 @@
 			path = Weather;
 			sourceTree = "<group>";
 		};
+		90C04672290D82A600F5C9B1 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				90C04673290D82B500F5C9B1 /* WeatherViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
 		90E18C85290C529D00A41760 = {
 			isa = PBXGroup;
 			children = (
@@ -131,6 +144,7 @@
 				90C04666290D641900F5C9B1 /* Models */,
 				90C0465D290D54FF00F5C9B1 /* Networking */,
 				90C04658290D3D8A00F5C9B1 /* Services */,
+				90C04672290D82A600F5C9B1 /* ViewModels */,
 				90E18C9F290C551F00A41760 /* Views */,
 				90E18C91290C529D00A41760 /* WeatherApp.swift */,
 				90E18C95290C529F00A41760 /* Assets.xcassets */,
@@ -282,7 +296,9 @@
 				90C0466A290D70F400F5C9B1 /* WeatherService.swift in Sources */,
 				90E18CA1290C553200A41760 /* WeatherView.swift in Sources */,
 				90C04663290D5DA700F5C9B1 /* HTTPRequestError.swift in Sources */,
+				90C04674290D82B500F5C9B1 /* WeatherViewModel.swift in Sources */,
 				90C04665290D5F4700F5C9B1 /* HTTPClient.swift in Sources */,
+				90C04676290E713A00F5C9B1 /* DateFormatterService.swift in Sources */,
 				90C0465A290D3DA300F5C9B1 /* LocationService.swift in Sources */,
 				90C04668290D65D200F5C9B1 /* WeatherModel.swift in Sources */,
 				90C0465C290D463D00F5C9B1 /* AccessLocationService.swift in Sources */,
