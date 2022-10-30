@@ -21,6 +21,10 @@
 		90C04671290D75BD00F5C9B1 /* WeatherEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90C04670290D75BD00F5C9B1 /* WeatherEndpoint.swift */; };
 		90C04674290D82B500F5C9B1 /* WeatherViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90C04673290D82B500F5C9B1 /* WeatherViewModel.swift */; };
 		90C04676290E713A00F5C9B1 /* DateFormatterService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90C04675290E713A00F5C9B1 /* DateFormatterService.swift */; };
+		90C04679290EBC4B00F5C9B1 /* UIScreen + ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90C04678290EBC4B00F5C9B1 /* UIScreen + ext.swift */; };
+		90C0467B290ECBAC00F5C9B1 /* Font + ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90C0467A290ECBAC00F5C9B1 /* Font + ext.swift */; };
+		90C0467E290ECCDF00F5C9B1 /* SF-Pro.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 90C0467D290ECCDF00F5C9B1 /* SF-Pro.ttf */; };
+		90C04681290EE49600F5C9B1 /* String + ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90C04680290EE49600F5C9B1 /* String + ext.swift */; };
 		90E18C92290C529D00A41760 /* WeatherApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90E18C91290C529D00A41760 /* WeatherApp.swift */; };
 		90E18C96290C529F00A41760 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 90E18C95290C529F00A41760 /* Assets.xcassets */; };
 		90E18C99290C529F00A41760 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 90E18C98290C529F00A41760 /* Preview Assets.xcassets */; };
@@ -43,6 +47,11 @@
 		90C04670290D75BD00F5C9B1 /* WeatherEndpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherEndpoint.swift; sourceTree = "<group>"; };
 		90C04673290D82B500F5C9B1 /* WeatherViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherViewModel.swift; sourceTree = "<group>"; };
 		90C04675290E713A00F5C9B1 /* DateFormatterService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFormatterService.swift; sourceTree = "<group>"; };
+		90C04678290EBC4B00F5C9B1 /* UIScreen + ext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIScreen + ext.swift"; sourceTree = "<group>"; };
+		90C0467A290ECBAC00F5C9B1 /* Font + ext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Font + ext.swift"; sourceTree = "<group>"; };
+		90C0467D290ECCDF00F5C9B1 /* SF-Pro.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-Pro.ttf"; sourceTree = "<group>"; };
+		90C0467F290ECCFE00F5C9B1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		90C04680290EE49600F5C9B1 /* String + ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String + ext.swift"; sourceTree = "<group>"; };
 		90E18C8E290C529D00A41760 /* Weather.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Weather.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		90E18C91290C529D00A41760 /* WeatherApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherApp.swift; sourceTree = "<group>"; };
 		90E18C95290C529F00A41760 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -120,6 +129,24 @@
 			path = ViewModels;
 			sourceTree = "<group>";
 		};
+		90C04677290EBC3B00F5C9B1 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				90C0467A290ECBAC00F5C9B1 /* Font + ext.swift */,
+				90C04678290EBC4B00F5C9B1 /* UIScreen + ext.swift */,
+				90C04680290EE49600F5C9B1 /* String + ext.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		90C0467C290ECCD100F5C9B1 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				90C0467D290ECCDF00F5C9B1 /* SF-Pro.ttf */,
+			);
+			path = Fonts;
+			sourceTree = "<group>";
+		};
 		90E18C85290C529D00A41760 = {
 			isa = PBXGroup;
 			children = (
@@ -141,6 +168,9 @@
 		90E18C90290C529D00A41760 /* Weather */ = {
 			isa = PBXGroup;
 			children = (
+				90C0467F290ECCFE00F5C9B1 /* Info.plist */,
+				90C0467C290ECCD100F5C9B1 /* Fonts */,
+				90C04677290EBC3B00F5C9B1 /* Extensions */,
 				90C04666290D641900F5C9B1 /* Models */,
 				90C0465D290D54FF00F5C9B1 /* Networking */,
 				90C04658290D3D8A00F5C9B1 /* Services */,
@@ -239,6 +269,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				90E18C99290C529F00A41760 /* Preview Assets.xcassets in Resources */,
+				90C0467E290ECCDF00F5C9B1 /* SF-Pro.ttf in Resources */,
 				90E18C96290C529F00A41760 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -301,7 +332,10 @@
 				90C04676290E713A00F5C9B1 /* DateFormatterService.swift in Sources */,
 				90C0465A290D3DA300F5C9B1 /* LocationService.swift in Sources */,
 				90C04668290D65D200F5C9B1 /* WeatherModel.swift in Sources */,
+				90C04681290EE49600F5C9B1 /* String + ext.swift in Sources */,
 				90C0465C290D463D00F5C9B1 /* AccessLocationService.swift in Sources */,
+				90C04679290EBC4B00F5C9B1 /* UIScreen + ext.swift in Sources */,
+				90C0467B290ECBAC00F5C9B1 /* Font + ext.swift in Sources */,
 				90E18C92290C529D00A41760 /* WeatherApp.swift in Sources */,
 				90C04661290D5D3500F5C9B1 /* Endpoint.swift in Sources */,
 				90C0466D290D714600F5C9B1 /* WeatherServiceError.swift in Sources */,
@@ -439,6 +473,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"Weather/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Weather/Info.plist;
 				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -472,6 +507,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"Weather/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Weather/Info.plist;
 				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;

@@ -11,32 +11,47 @@ struct WeatherView: View {
     
     @ObservedObject var viewModel: WeatherViewModel
     
+    @State var isWeatherExpand: Bool = true
+    
     var body: some View {
-        VStack {
+        
+        ZStack {
+            Color.gray
+                .ignoresSafeArea()
+            
             ScrollView {
-                Group {
-                    Text(viewModel.cityName ?? "—")
-                    Text(viewModel.temp ?? "—")
-                    Text(viewModel.windSpeed ?? "—")
-                    Text(viewModel.humidity ?? "—")
-                    Text(viewModel.weatherDescription ?? "—")
-                    Text(viewModel.icon ?? "—")
-                    Text(viewModel.sunrise ?? "—")
-                    Text(viewModel.sunset ?? "—")
-                    Text(viewModel.feelsLike ?? "—")
+                if isWeatherExpand {
+                    VStack(spacing: 0) {
+                        Text(viewModel.cityName ?? "—")
+                            .font(.customFont(weight: .medium, size: 34))
+                        Text(viewModel.temp ?? "—")
+                            .font(.customFont(weight: .medium, size: 100))
+                        Text(viewModel.weatherDescription?.capitalizingFirstLetter() ?? "—")
+                            .font(.customFont(weight: .medium, size: 22))
+                        Text("H: \(viewModel.dailyForecast.first?.maxTemp ?? "—") L:\(viewModel.dailyForecast.first?.minTemp ?? "—")")
+                            .font(.customFont(weight: .medium, size: 22))
+                    }
+                    .foregroundColor(.white)
+                    .transition(.opacity)
+                } else {
+                    VStack {
+                        Text(viewModel.cityName ?? "—")
+                            .font(.customFont(weight: .medium, size: 34))
+                        HStack {
+                            Text(viewModel.temp ?? "—")
+                            Text("|")
+                            Text(viewModel.weatherDescription?.capitalizingFirstLetter() ?? "—")
+                        }
+                        .font(.customFont(weight: .medium, size: 18))
+                    }
+                    .foregroundColor(.white)
+                    .transition(.opacity)
                 }
                 
-                ForEach(viewModel.hourlyForecast,  id: \.date) { item in
-                    Text(item.icon)
-                    Text(item.date)
-                    Text(item.temp)
-                }
-                
-                ForEach(viewModel.dailyForecast,  id: \.date) { item in
-                    Text(item.icon)
-                    Text(item.date)
-                    Text(item.minTemp)
-                    Text(item.maxTemp)
+                Button ("isWeatherExpand") {
+                    withAnimation {
+                        isWeatherExpand.toggle()
+                    }
                 }
             }
         }

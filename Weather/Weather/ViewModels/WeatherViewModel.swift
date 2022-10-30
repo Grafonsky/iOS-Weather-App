@@ -63,7 +63,7 @@ private extension WeatherViewModel {
     
     func updateUI(data: WeatherData) {
         self.cityName = data.city
-        self.temp = "\(Int(data.weatherModel.current.temp))°C"
+        self.temp = "\(Int(data.weatherModel.current.temp))°"
         self.windSpeed = "\(data.weatherModel.current.windSpeed)\nkm/h"
         self.humidity = "\(data.weatherModel.current.humidity)%"
         self.weatherDescription = data.weatherModel.current.weather.first?.description
@@ -76,8 +76,8 @@ private extension WeatherViewModel {
             time: data.weatherModel.current.sunset,
             timezoneOffset: data.weatherModel.timeOffset,
             dateType: .sunMove)
-        self.feelsLike = "\(data.weatherModel.current.feelsLike)°C"
-
+        self.feelsLike = "\(Int(data.weatherModel.current.feelsLike))°"
+        
         data.weatherModel.hourly.forEach { hourly in
             let icon = hourly.weather.first?.icon ?? ""
             let date = DateFormatterService.shared.dateToString(
@@ -88,7 +88,7 @@ private extension WeatherViewModel {
                 time: Int(Date().timeIntervalSince1970),
                 timezoneOffset: data.weatherModel.timeOffset,
                 dateType: .hour)
-            let temp = "\(hourly.temp)°C"
+            let temp = "\(Int(hourly.temp))°"
             let item = (
                 icon: icon,
                 date: date == currentHour ? "Now" : date,
@@ -106,8 +106,8 @@ private extension WeatherViewModel {
                 time: Int(Date().timeIntervalSince1970),
                 timezoneOffset: data.weatherModel.timeOffset,
                 dateType: .weekDay)
-            let mintemp = "\(daily.temp.min)°C"
-            let maxTemp = "\(daily.temp.max)°C"
+            let mintemp = "\(Int(daily.temp.min))°"
+            let maxTemp = "\(Int(daily.temp.max))°"
             let item = (
                 icon: icon,
                 date: date == currentDay ? "Today" : date,
