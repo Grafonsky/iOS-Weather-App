@@ -47,11 +47,6 @@ final class WeatherViewModel: ObservableObject {
 
 private extension WeatherViewModel {
     
-//    func convertTempToCelsius(temp: Double) -> String {
-//        let result = "\(temp - 273.15)°C"
-//        return result
-//    }
-    
     func updateData() {
         Task {
             let weather = await weatherService.getCurrentTemp()
