@@ -30,6 +30,7 @@ extension WeatherData {
                     sunset: 1667060533,
                     feelsLike: 294.39),
                 hourly: [],
-                daily: []))
+                daily: [],
+                alerts: []))
     }
 }

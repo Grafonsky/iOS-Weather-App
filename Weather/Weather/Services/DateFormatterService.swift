@@ -15,7 +15,7 @@ enum DateType {
         case .hour:
             return "H"
         case .sunMove:
-            return "H:m"
+            return "H:mm"
         case .weekDay:
             return "EEEE"
         }
