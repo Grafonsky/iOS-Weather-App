@@ -8,13 +8,27 @@
 import SwiftUI
 
 struct HourlyCellView: View {
+    
+    @Binding var hour: String
+    @Binding var icon: String
+    @Binding var temp: String
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        VStack(alignment: .center, spacing: 8) {
+            Text(hour)
+            Image(systemName: icon)
+            Text(temp)
+        }
+        .font(.customFont(weight: .medium, size: 17))
+        .foregroundColor(.white)
     }
 }
 
 struct HourlyCellView_Previews: PreviewProvider {
     static var previews: some View {
-        HourlyCellView()
+        HourlyCellView(
+            hour: .constant("Now"),
+            icon: .constant("111"),
+            temp: .constant("1°"))
     }
 }

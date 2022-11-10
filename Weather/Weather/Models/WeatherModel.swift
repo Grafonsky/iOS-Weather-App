@@ -14,9 +14,10 @@ struct WeatherModel: Decodable {
     let current: CurrentWeather
     let hourly: [HourlyWeather]
     let daily: [DailyWeather]
+    let alerts: [Alerts]?
     
     enum CodingKeys: String, CodingKey {
-        case current, hourly, daily
+        case current, hourly, daily, alerts
         case timeOffset = "timezone_offset"
     }
 }
@@ -82,4 +83,17 @@ extension WeatherModel {
         let min: Double
         let max: Double
     }
+}
+
+// MARK: - Alerts
+
+extension WeatherModel {
+    
+    struct Alerts: Decodable {
+        let event: String
+        let description: String
+        let start: Int
+        let end: Int
+    }
+    
 }
