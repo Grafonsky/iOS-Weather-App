@@ -19,7 +19,7 @@ struct WeatherView: View {
         ZStack {
             Color.gray
                 .ignoresSafeArea()
-            ScrollView {
+            ScrollView(showsIndicators: false) {
                 VStack(spacing: 0) {
                     Text(viewModel.cityName ?? "—")
                         .font(.customFont(weight: .medium, size: 34))

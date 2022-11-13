@@ -27,56 +27,69 @@ struct DailyCellView: View {
         let currentTempOffset: CGFloat = ((maxWeekTemp - maxTemp) + (minWeekTemp - minTemp) + (minTemp - currentTemp) + (maxTemp - currentTemp)) / 2
         
         ZStack {
+            
             HStack {
                 Text(date)
                     .font(.customFont(weight: .medium, size: 17))
                 Spacer()
-                HStack(spacing: 10) {
-                    Text("\(Int(minTemp))°")
-                        .font(.customFont(weight: .medium, size: 17))
-                    ZStack {
-                        Rectangle()
-                            .opacity(0.15)
-                            .foregroundColor(.black)
-                            .frame(height: 5)
-                            .overlay {
-                                LinearGradient(
-                                    gradient: Gradient(
-                                        colors: [
-                                            Color.getWeatherColor(temp: minTemp),
-                                            Color.getWeatherColor(temp: maxTemp)]),
-                                    startPoint: .leading,
-                                    endPoint: .trailing)
-                                .cornerRadius(2.5)
-                                .frame(width: weatherRangeWidth)
-                                .offset(x: -offset * unitWidth)
-                                .frame(height: 5)
-                            }
-                            .reverseMask {
-                                if isCurrentDay {
-                                    Circle()
-                                        .frame(width: 10, height: 10)
-                                        .offset(x: -currentTempOffset * unitWidth)
-                                }
-                            }
-                            .cornerRadius(2.5)
+            }
+            
+            HStack {
+                Image(systemName: icon)
+                    .offset(x: -15)
+            }
+            
+            HStack(alignment: .firstTextBaseline) {
+                Text("\(Int(minTemp))°")
+                    .font(.customFont(weight: .medium, size: 17))
+                    .offset(x: 25)
+            }
+            
+            HStack {
+                Spacer()
+                Text("\(Int(maxTemp))°")
+                    .font(.customFont(weight: .medium, size: 17))
+            }
+            
+            ZStack {
+                Rectangle()
+                    .opacity(0.15)
+                    .foregroundColor(.black)
+                    .frame(height: 5)
+                    .overlay {
+                        LinearGradient(
+                            gradient: Gradient(
+                                colors: [
+                                    Color.getWeatherColor(temp: minTemp),
+                                    Color.getWeatherColor(temp: maxTemp)]),
+                            startPoint: .leading,
+                            endPoint: .trailing)
+                        .cornerRadius(2.5)
+                        .frame(width: weatherRangeWidth)
+                        .offset(x: -offset * unitWidth)
+                        .frame(height: 5)
+                    }
+                    .reverseMask {
                         if isCurrentDay {
                             Circle()
-                                .frame(width: 5, height: 5)
+                                .frame(width: 10, height: 10)
                                 .offset(x: -currentTempOffset * unitWidth)
                         }
                     }
-                    .frame(width: UIScreen.screenWidth * 0.2, height: 5)
-                    Text("\(Int(maxTemp))°")
-                        .font(.customFont(weight: .medium, size: 17))
+                    .cornerRadius(2.5)
+                if isCurrentDay {
+                    Circle()
+                        .frame(width: 5, height: 5)
+                        .offset(x: -currentTempOffset * unitWidth)
                 }
             }
-            Image(systemName: icon)
-                .offset(x: -15)
+            .frame(width: UIScreen.screenWidth * 0.2, height: 5)
+            .offset(x: UIScreen.screenWidth * 0.2 + 5)
         }
         .foregroundColor(.white)
     }
 }
+
 
 struct DailyCellView_Previews: PreviewProvider {
     static var previews: some View {
