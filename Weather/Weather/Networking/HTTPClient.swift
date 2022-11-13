@@ -54,7 +54,7 @@ extension HTTPClient {
                 default:
                     return continuation.resume(returning: .failure(.unexpectedStatus(code: responseCode)))
                 }
-            }
+            }.resume()
         })
     }
 }

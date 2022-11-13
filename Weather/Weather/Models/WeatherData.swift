@@ -18,6 +18,7 @@ extension WeatherData {
         .init(
             city: "Johannesburg",
             weatherModel: .init(
+                timeOffset: -14400,
                 current: .init(
                     temp: 294.69,
                     windSpeed: 2.68,
@@ -29,6 +30,7 @@ extension WeatherData {
                     sunset: 1667060533,
                     feelsLike: 294.39),
                 hourly: [],
-                daily: []))
+                daily: [],
+                alerts: []))
     }
 }
