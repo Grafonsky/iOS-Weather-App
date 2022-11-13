@@ -44,6 +44,27 @@ struct WeatherView: View {
                         maxWeekTemp: $viewModel.maxWeekTemp,
                         currentTemp: $viewModel.currentTemp)
                 }
+                
+                VStack {
+                    HStack {
+                        WeatherDetailsCellView(
+                            detailsType: .feelsLike,
+                            weatherData: $viewModel.feelsLike)
+                        WeatherDetailsCellView(
+                            detailsType: .humidity,
+                            weatherData: $viewModel.humidity)
+                    }
+                    
+                    HStack {
+                        WeatherDetailsCellView(
+                            detailsType: .wind,
+                            weatherData: $viewModel.windSpeed)
+                        WeatherDetailsCellView(
+                            detailsType: .sunrise,
+                            weatherData: $viewModel.sunrise)
+                    }
+                }
+                Spacer()
             }
         }
     }
