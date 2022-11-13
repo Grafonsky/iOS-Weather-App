@@ -18,18 +18,18 @@ final class WeatherViewModel: ObservableObject {
     
     @Published private(set) var cityName: String?
     @Published private(set) var temp: String?
-    @Published private(set) var windSpeed: String?
-    @Published private(set) var humidity: String?
     @Published private(set) var weatherDescription: String?
     @Published private(set) var icon: String?
-    @Published private(set) var sunrise: String?
     @Published private(set) var sunset: String?
-    @Published private(set) var feelsLike: String?
     
     @Published var dailyForecast: [DailyForecast] = []
     @Published var hourlyForecast: [HourlyForecast] = []
     @Published var alert: String?
-    
+    @Published var feelsLike: String?
+    @Published var humidity: String?
+    @Published var windSpeed: String?
+    @Published var sunrise: String?
+
     var minWeekTemp: CGFloat = 999
     var maxWeekTemp: CGFloat = -999
     var currentTemp: CGFloat = 999
@@ -79,8 +79,8 @@ private extension WeatherViewModel {
         self.cityName = data.city
         self.temp = "\(Int(data.weatherModel.current.temp))°"
         self.currentTemp = data.weatherModel.current.temp
-        self.windSpeed = "\(data.weatherModel.current.windSpeed)\nkm/h"
-        self.humidity = "\(data.weatherModel.current.humidity)%"
+        self.windSpeed = "\(data.weatherModel.current.windSpeed) km/h"
+        self.humidity = "\(Int(data.weatherModel.current.humidity))%"
         self.weatherDescription = data.weatherModel.current.weather.first?.description
         self.icon = data.weatherModel.current.weather.first?.icon
         self.sunrise = DateFormatterService.shared.dateToString(
