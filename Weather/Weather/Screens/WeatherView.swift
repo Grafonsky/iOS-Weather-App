@@ -17,18 +17,26 @@ struct WeatherView: View {
         let maxTemp = $viewModel.dailyForecast.first?.maxTemp.wrappedValue ?? 0
         
         ZStack {
-            Color.gray
-                .ignoresSafeArea()
+            
+            BackgroundView(
+                topBackgroundGradient: $viewModel.topBackgroundColor,
+                bottomBackgroundGradient: $viewModel.bottomBackgroundColor,
+                spriteKitNodes: $viewModel.spriteKitNodes)
+            
             ScrollView(showsIndicators: false) {
                 VStack(spacing: 0) {
                     Text(viewModel.cityName ?? "—")
                         .font(.customFont(weight: .medium, size: 34))
+                        .shadow(color: Color.black.opacity(0.35), radius: 5)
                     Text(viewModel.temp ?? "—")
                         .font(.customFont(weight: .medium, size: 100))
+                        .shadow(color: Color.black.opacity(0.25), radius: 5)
                     Text(viewModel.weatherDescription?.capitalizingFirstLetter() ?? "—")
                         .font(.customFont(weight: .medium, size: 22))
+                        .shadow(color: Color.black.opacity(0.4), radius: 5)
                     Text("H: \(Int(minTemp))° L: \(Int(maxTemp))°")
                         .font(.customFont(weight: .medium, size: 22))
+                        .shadow(color: Color.black.opacity(0.4), radius: 5)
                 }
                 .foregroundColor(.white)
                 .transition(.opacity)
@@ -49,24 +57,29 @@ struct WeatherView: View {
                     HStack {
                         WeatherDetailsCellView(
                             detailsType: .feelsLike,
+                            addInfo: viewModel.isFeelsLikeCoolerTemp ? .constant("isFeelsLikeCoolerTemp") : .constant(nil),
                             weatherData: $viewModel.feelsLike)
                         WeatherDetailsCellView(
                             detailsType: .humidity,
+                            addInfo: .constant(nil),
                             weatherData: $viewModel.humidity)
                     }
                     
                     HStack {
                         WeatherDetailsCellView(
                             detailsType: .wind,
+                            addInfo: .constant(nil),
                             weatherData: $viewModel.windSpeed)
                         WeatherDetailsCellView(
-                            detailsType: .sunrise,
-                            weatherData: $viewModel.sunrise)
+                            detailsType: viewModel.isAMtime ? .sunrise : .sunset,
+                            addInfo: viewModel.isAMtime ? $viewModel.sunset : $viewModel.sunrise,
+                            weatherData: viewModel.isAMtime ? $viewModel.sunrise : $viewModel.sunset)
                     }
                 }
                 Spacer()
             }
         }
+        .preferredColorScheme(.dark)
     }
 }
 
