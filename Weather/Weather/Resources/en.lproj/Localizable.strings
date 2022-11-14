@@ -1,0 +1,23 @@
+/* 
+ Localizable.strings
+ Weather
+ 
+ Created by Bohdan Hawrylyshyn on 14.11.2022.
+ 
+ */
+
+// MARK: - v2.0 -
+
+"highestLowestTemps" = "H: %@° L: %@°";
+"now" = "Now";
+"today" = "Today";
+"alert" = "%@ %@ from %@ to %@";
+"dailyForecast" = "Daily forecast";
+"wind" = "Wind";
+"humidity" = "Humidity";
+"feelsLike" = "Feels like";
+"sunrise" = "Sunrise";
+"sunset" = "Sunset";
+"windMakeItColder" = "Wind is making it feel colder";
+"sunriseTime" = "Sunrise: %@";
+"sunsetTime" = "Sunset: %@";

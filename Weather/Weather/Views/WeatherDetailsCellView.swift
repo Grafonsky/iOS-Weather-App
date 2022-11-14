@@ -13,15 +13,15 @@ enum WeatherDetailsType {
     var title: Text {
         switch self {
         case .wind:
-            return Text("Wind".uppercased())
+            return Text("wind".localizable.uppercased())
         case .humidity:
-            return Text("Humidity".uppercased())
+            return Text("humidity".localizable.uppercased())
         case .feelsLike:
-            return Text("Feels like".uppercased())
+            return Text("feelsLike".localizable.uppercased())
         case .sunrise:
-            return Text("Sunrise".uppercased())
+            return Text("sunrise".localizable.uppercased())
         case .sunset:
-            return Text("Sunset".uppercased())
+            return Text("sunset".localizable.uppercased())
         }
     }
     
@@ -76,11 +76,13 @@ struct WeatherDetailsCellView: View {
                         case .wind, .humidity:
                             Text(addInfo ?? "")
                         case .feelsLike:
-                            Text("Wind is making it feel colder")
+                            Text("windMakeItColder".localizable)
                         case .sunrise:
-                            Text("Sunset: \(addInfo ?? "")")
+                            Text(String(format: NSLocalizedString(
+                                "sunsetTime", comment: ""), addInfo ?? ""))
                         case .sunset:
-                            Text("Sunrise: \(addInfo ?? "")")
+                            Text(String(format: NSLocalizedString(
+                                "sunriseTime", comment: ""), addInfo ?? ""))
                         }
                     }
                 }
