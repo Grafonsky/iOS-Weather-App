@@ -30,13 +30,11 @@ final class SpriteScene: SKScene {
         bottomBackgroundGradientColor: UIColor) {
             
             self.init(size: .init(width: UIScreen.screenWidth, height: UIScreen.screenHeight))
-            
             self.nodeName = nodeName
             self.topBackgroundGradientColor = topBackgroundGradientColor
             self.bottomBackgroundGradientColor = bottomBackgroundGradientColor
             addScene()
         }
-    
 }
 
 extension SpriteScene {

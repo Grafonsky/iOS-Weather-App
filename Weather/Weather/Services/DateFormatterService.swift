@@ -8,7 +8,7 @@
 import Foundation
 
 enum DateType {
-    case hour, sunMove, weekDay
+    case hour, sunMove, weekDay, comparisonHours
     
     var dateFormat: String {
         switch self {
@@ -18,6 +18,8 @@ enum DateType {
             return "H:mm"
         case .weekDay:
             return "EEEE"
+        case .comparisonHours:
+            return "HH"
         }
     }
 }

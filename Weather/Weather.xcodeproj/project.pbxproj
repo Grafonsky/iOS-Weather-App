@@ -149,6 +149,14 @@
 			path = SpriteKitNodes;
 			sourceTree = "<group>";
 		};
+		9067BC6629223B1F00B3B4D3 /* Screens */ = {
+			isa = PBXGroup;
+			children = (
+				90E18CA0290C553200A41760 /* WeatherView.swift */,
+			);
+			path = Screens;
+			sourceTree = "<group>";
+		};
 		90C04658290D3D8A00F5C9B1 /* Services */ = {
 			isa = PBXGroup;
 			children = (
@@ -251,6 +259,7 @@
 				90C0465D290D54FF00F5C9B1 /* Networking */,
 				90C04658290D3D8A00F5C9B1 /* Services */,
 				90C04672290D82A600F5C9B1 /* ViewModels */,
+				9067BC6629223B1F00B3B4D3 /* Screens */,
 				90E18C9F290C551F00A41760 /* Views */,
 				90E18C91290C529D00A41760 /* WeatherApp.swift */,
 				90E18C95290C529F00A41760 /* Assets.xcassets */,
@@ -271,7 +280,6 @@
 			isa = PBXGroup;
 			children = (
 				90C04682290EE8C200F5C9B1 /* HourlyForecastView.swift */,
-				90E18CA0290C553200A41760 /* WeatherView.swift */,
 				90C04684290EF01F00F5C9B1 /* HourlyCellView.swift */,
 				90C04688290EFC3D00F5C9B1 /* DailyForecastView.swift */,
 				90634BD329129BD200F9DF71 /* TrackableScrollView.swift */,

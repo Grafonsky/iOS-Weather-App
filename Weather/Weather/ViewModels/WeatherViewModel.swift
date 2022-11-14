@@ -20,7 +20,6 @@ final class WeatherViewModel: ObservableObject {
     @Published private(set) var temp: String?
     @Published private(set) var weatherDescription: String?
     @Published private(set) var icon: String?
-    @Published private(set) var sunset: String?
     
     @Published var dailyForecast: [DailyForecast] = []
     @Published var hourlyForecast: [HourlyForecast] = []
@@ -30,12 +29,15 @@ final class WeatherViewModel: ObservableObject {
     @Published var windSpeed: String?
     @Published var topBackgroundColor: String = ""
     @Published var bottomBackgroundColor: String = ""
+    @Published var sunrise: String?
+    @Published var sunset: String?
     
-    var sunrise: String?
     var minWeekTemp: CGFloat = 999
     var maxWeekTemp: CGFloat = -999
     var currentTemp: CGFloat = 999
     var spriteKitNodes: [SpriteKitNode] = []
+    var isFeelsLikeCoolerTemp: Bool = false
+    var isAMtime: Bool = false
     
     private var currentCityStore: AnyCancellable?
     
@@ -74,7 +76,14 @@ private extension WeatherViewModel {
     }
     
     func updateUI(data: WeatherData) {
-        
+        setupData(data: data)
+        setupHourlyForecast(data: data)
+        setupDailyForecast(data: data)
+        setupAlerts(data: data)
+        setupAdditionalWeatherInfo(data: data)
+    }
+    
+    func setupData(data: WeatherData) {
         self.alert = nil
         self.hourlyForecast = []
         self.dailyForecast = []
@@ -99,7 +108,9 @@ private extension WeatherViewModel {
         self.topBackgroundColor = WeatherGradientModel().colors[icon ?? ""]?[0] ?? ""
         self.bottomBackgroundColor = WeatherGradientModel().colors[icon ?? ""]?[1] ?? ""
         self.spriteKitNodes = SpriteKitNodes().nodes[icon ?? ""] ?? []
-        
+    }
+    
+    func setupHourlyForecast(data: WeatherData) {
         data.weatherModel.hourly.forEach { hourly in
             if self.hourlyForecast.count <= 23 {
                 let icon = self.iconsModel.iconsDict[hourly.weather.first?.icon ?? ""] ?? ""
@@ -119,7 +130,9 @@ private extension WeatherViewModel {
                 self.hourlyForecast.append(item)
             }
         }
-        
+    }
+    
+    func setupDailyForecast(data: WeatherData) {
         data.weatherModel.daily.forEach { daily in
             let icon = self.iconsModel.iconsDict[daily.weather.first?.icon ?? ""] ?? ""
             let date = DateFormatterService.shared.dateToString(
@@ -154,7 +167,9 @@ private extension WeatherViewModel {
                 self.dailyForecast.append(item)
             }
         }
-        
+    }
+    
+    func setupAlerts(data: WeatherData) {
         if data.weatherModel.alerts != nil {
             let alertEvent = data.weatherModel.alerts?.last?.event ?? ""
             let alertDescription = data.weatherModel.alerts?.last?.description ?? ""
@@ -168,5 +183,25 @@ private extension WeatherViewModel {
                 dateType: .sunMove)
             self.alert = "\(alertEvent) \(alertDescription) from \(alertStartDate) to \(alertEndDate)"
         }
+    }
+    
+    func setupAdditionalWeatherInfo(data: WeatherData) {
+        setupFeelsLikeInfo(data: data)
+        setupSunsetInfo(data: data)
+    }
+    
+    func setupFeelsLikeInfo(data: WeatherData) {
+        let actualTemp = Int(data.weatherModel.current.temp)
+        let feelsLikeTemp = Int(data.weatherModel.current.feelsLike)
+        self.isFeelsLikeCoolerTemp = actualTemp > feelsLikeTemp ? true : false
+    }
+    
+    func setupSunsetInfo(data: WeatherData) {
+        let currentEpochTime = Int(Date().timeIntervalSince1970 * 1000.0)
+        let currentHour = DateFormatterService.shared.dateToString(
+            time: currentEpochTime,
+            timezoneOffset: data.weatherModel.timeOffset,
+            dateType: .comparisonHours)
+        isAMtime = Int(currentHour) ?? 0 < 12 ? true : false
     }
 }
