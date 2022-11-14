@@ -11,48 +11,64 @@ struct WeatherView: View {
     
     @ObservedObject var viewModel: WeatherViewModel
     
-    @State var isWeatherExpand: Bool = true
-    
     var body: some View {
         
+        let minTemp = $viewModel.dailyForecast.first?.minTemp.wrappedValue ?? 0
+        let maxTemp = $viewModel.dailyForecast.first?.maxTemp.wrappedValue ?? 0
+        
         ZStack {
-            Color.gray
-                .ignoresSafeArea()
             
-            ScrollView {
-                if isWeatherExpand {
-                    VStack(spacing: 0) {
-                        Text(viewModel.cityName ?? "—")
-                            .font(.customFont(weight: .medium, size: 34))
-                        Text(viewModel.temp ?? "—")
-                            .font(.customFont(weight: .medium, size: 100))
-                        Text(viewModel.weatherDescription?.capitalizingFirstLetter() ?? "—")
-                            .font(.customFont(weight: .medium, size: 22))
-                        Text("H: \(viewModel.dailyForecast.first?.maxTemp ?? "—") L:\(viewModel.dailyForecast.first?.minTemp ?? "—")")
-                            .font(.customFont(weight: .medium, size: 22))
-                    }
-                    .foregroundColor(.white)
-                    .transition(.opacity)
-                } else {
-                    VStack {
-                        Text(viewModel.cityName ?? "—")
-                            .font(.customFont(weight: .medium, size: 34))
-                        HStack {
-                            Text(viewModel.temp ?? "—")
-                            Text("|")
-                            Text(viewModel.weatherDescription?.capitalizingFirstLetter() ?? "—")
-                        }
-                        .font(.customFont(weight: .medium, size: 18))
-                    }
-                    .foregroundColor(.white)
-                    .transition(.opacity)
+            BackgroundView(
+                topBackgroundGradient: $viewModel.topBackgroundColor,
+                bottomBackgroundGradient: $viewModel.bottomBackgroundColor,
+                spriteKitNodes: $viewModel.spriteKitNodes)
+            
+            ScrollView(showsIndicators: false) {
+                VStack(spacing: 0) {
+                    Text(viewModel.cityName ?? "—")
+                        .font(.customFont(weight: .medium, size: 34))
+                    Text(viewModel.temp ?? "—")
+                        .font(.customFont(weight: .medium, size: 100))
+                    Text(viewModel.weatherDescription?.capitalizingFirstLetter() ?? "—")
+                        .font(.customFont(weight: .medium, size: 22))
+                    Text("H: \(Int(minTemp))° L: \(Int(maxTemp))°")
+                        .font(.customFont(weight: .medium, size: 22))
+                }
+                .foregroundColor(.white)
+                .transition(.opacity)
+                
+                VStack(spacing: 10) {
+                    HourlyForecastView(
+                        hourly: $viewModel.hourlyForecast,
+                        alert: $viewModel.alert)
+                    
+                    DailyForecastView(
+                        daily: $viewModel.dailyForecast,
+                        minWeekTemp: $viewModel.minWeekTemp,
+                        maxWeekTemp: $viewModel.maxWeekTemp,
+                        currentTemp: $viewModel.currentTemp)
                 }
                 
-                Button ("isWeatherExpand") {
-                    withAnimation {
-                        isWeatherExpand.toggle()
+                VStack {
+                    HStack {
+                        WeatherDetailsCellView(
+                            detailsType: .feelsLike,
+                            weatherData: $viewModel.feelsLike)
+                        WeatherDetailsCellView(
+                            detailsType: .humidity,
+                            weatherData: $viewModel.humidity)
+                    }
+                    
+                    HStack {
+                        WeatherDetailsCellView(
+                            detailsType: .wind,
+                            weatherData: $viewModel.windSpeed)
+                        WeatherDetailsCellView(
+                            detailsType: .sunrise,
+                            weatherData: $viewModel.sunrise)
                     }
                 }
+                Spacer()
             }
         }
     }
