@@ -24,7 +24,7 @@ struct HourlyForecastView: View {
             VStack {
                 if alert != nil {
                     HStack {
-                        Text(alert ?? "No dangers here")
+                        Text(alert ?? "—")
                             .font(.customFont(weight: .regular, size: 14))
                             .foregroundColor(.white)
                         Spacer()

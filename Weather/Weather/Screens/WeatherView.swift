@@ -13,9 +13,6 @@ struct WeatherView: View {
     
     var body: some View {
         
-        let minTemp = $viewModel.dailyForecast.first?.minTemp.wrappedValue ?? 0
-        let maxTemp = $viewModel.dailyForecast.first?.maxTemp.wrappedValue ?? 0
-        
         ZStack {
             
             BackgroundView(
@@ -34,9 +31,12 @@ struct WeatherView: View {
                     Text(viewModel.weatherDescription?.capitalizingFirstLetter() ?? "—")
                         .font(.customFont(weight: .medium, size: 22))
                         .shadow(color: Color.black.opacity(0.4), radius: 5)
-                    Text("H: \(Int(minTemp))° L: \(Int(maxTemp))°")
-                        .font(.customFont(weight: .medium, size: 22))
-                        .shadow(color: Color.black.opacity(0.4), radius: 5)
+                    Text(String(format: NSLocalizedString(
+                        "highestLowestTemps", comment: ""),
+                                $viewModel.maxTemp.wrappedValue ?? "",
+                                $viewModel.minTemp.wrappedValue ?? ""))
+                    .font(.customFont(weight: .medium, size: 22))
+                    .shadow(color: Color.black.opacity(0.4), radius: 5)
                 }
                 .foregroundColor(.white)
                 .transition(.opacity)

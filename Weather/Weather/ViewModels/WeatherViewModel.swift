@@ -31,6 +31,8 @@ final class WeatherViewModel: ObservableObject {
     @Published var bottomBackgroundColor: String = ""
     @Published var sunrise: String?
     @Published var sunset: String?
+    @Published var minTemp: String?
+    @Published var maxTemp: String?
     
     var minWeekTemp: CGFloat = 999
     var maxWeekTemp: CGFloat = -999
@@ -90,6 +92,8 @@ private extension WeatherViewModel {
         
         self.cityName = data.city
         self.temp = "\(Int(data.weatherModel.current.temp))°"
+        self.minTemp = "\(Int(data.weatherModel.daily.first?.temp.min ?? 0))"
+        self.maxTemp = "\(Int(data.weatherModel.daily.first?.temp.max ?? 0))"
         self.currentTemp = data.weatherModel.current.temp
         self.windSpeed = "\(data.weatherModel.current.windSpeed) km/h"
         self.humidity = "\(Int(data.weatherModel.current.humidity))%"
@@ -125,7 +129,7 @@ private extension WeatherViewModel {
                 let temp = "\(Int(hourly.temp))°"
                 let item = (
                     icon: icon,
-                    date: date == currentHour ? "Now" : date,
+                    date: date == currentHour ? "now".localizable : date,
                     temp: temp)
                 self.hourlyForecast.append(item)
             }
@@ -158,7 +162,7 @@ private extension WeatherViewModel {
             
             let item = (
                 icon: icon,
-                date: isCurrentDay ? "Today" : date.capitalizingFirstLetter(),
+                date: isCurrentDay ? "today".localizable : date.capitalizingFirstLetter(),
                 minTemp: mintemp,
                 maxTemp: maxTemp,
                 isCurrentDay: isCurrentDay)
@@ -181,7 +185,12 @@ private extension WeatherViewModel {
                 time: data.weatherModel.alerts?.last?.end ?? 0,
                 timezoneOffset: data.weatherModel.timeOffset,
                 dateType: .sunMove)
-            self.alert = "\(alertEvent) \(alertDescription) from \(alertStartDate) to \(alertEndDate)"
+            self.alert = String(format: NSLocalizedString(
+                "alert", comment: ""),
+                                alertEvent,
+                                alertDescription,
+                                alertStartDate,
+                                alertEndDate)
         }
     }
     

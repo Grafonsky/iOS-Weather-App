@@ -33,7 +33,7 @@ struct DailyForecastView: View {
                 VStack {
                     HStack(spacing: 5) {
                         Image(systemName: "calendar")
-                        Text("10-DAY FORECAST")
+                        Text("dailyForecast".localizable.uppercased())
                             .font(.customFont(weight: .regular, size: 14))
                             .foregroundColor(.white)
                         Spacer()
