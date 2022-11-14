@@ -5,7 +5,7 @@
 //  Created by Bohdan Hawrylyshyn on 29.10.2022.
 //
 
-import Foundation
+import SwiftUI
 import Combine
 
 final class WeatherViewModel: ObservableObject {
@@ -28,11 +28,14 @@ final class WeatherViewModel: ObservableObject {
     @Published var feelsLike: String?
     @Published var humidity: String?
     @Published var windSpeed: String?
-    @Published var sunrise: String?
-
+    @Published var topBackgroundColor: String = ""
+    @Published var bottomBackgroundColor: String = ""
+    
+    var sunrise: String?
     var minWeekTemp: CGFloat = 999
     var maxWeekTemp: CGFloat = -999
     var currentTemp: CGFloat = 999
+    var spriteKitNodes: [SpriteKitNode] = []
     
     private var currentCityStore: AnyCancellable?
     
@@ -92,6 +95,10 @@ private extension WeatherViewModel {
             timezoneOffset: data.weatherModel.timeOffset,
             dateType: .sunMove)
         self.feelsLike = "\(Int(data.weatherModel.current.feelsLike))°"
+        
+        self.topBackgroundColor = WeatherGradientModel().colors[icon ?? ""]?[0] ?? ""
+        self.bottomBackgroundColor = WeatherGradientModel().colors[icon ?? ""]?[1] ?? ""
+        self.spriteKitNodes = SpriteKitNodes().nodes[icon ?? ""] ?? []
         
         data.weatherModel.hourly.forEach { hourly in
             if self.hourlyForecast.count <= 23 {

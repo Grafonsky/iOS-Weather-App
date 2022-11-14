@@ -17,8 +17,12 @@ struct WeatherView: View {
         let maxTemp = $viewModel.dailyForecast.first?.maxTemp.wrappedValue ?? 0
         
         ZStack {
-            Color.gray
-                .ignoresSafeArea()
+            
+            BackgroundView(
+                topBackgroundGradient: $viewModel.topBackgroundColor,
+                bottomBackgroundGradient: $viewModel.bottomBackgroundColor,
+                spriteKitNodes: $viewModel.spriteKitNodes)
+            
             ScrollView(showsIndicators: false) {
                 VStack(spacing: 0) {
                     Text(viewModel.cityName ?? "—")
