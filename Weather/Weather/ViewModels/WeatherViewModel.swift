@@ -40,6 +40,7 @@ final class WeatherViewModel: ObservableObject {
     var spriteKitNodes: [SpriteKitNode] = []
     var isFeelsLikeCoolerTemp: Bool = false
     var isAMtime: Bool = false
+    var timeOffset: Int = 0
     
     private var currentCityStore: AnyCancellable?
     
@@ -64,20 +65,31 @@ final class WeatherViewModel: ObservableObject {
 private extension WeatherViewModel {
     
     func updateData() {
+        loadDataFromCoreData()
         Task {
             let weather = await weatherService.getCurrentTemp()
             switch weather {
-            case .success(let data):
-                DispatchQueue.main.async { [weak self] in
-                    self?.updateUI(data: data)
-                }
+            case .success(_):
+                loadDataFromCoreData()
             case .failure(let error):
+                print("INSERT FAILURE ALERT")
                 break
             }
         }
     }
     
-    func updateUI(data: WeatherData) {
+    func loadDataFromCoreData() {
+        DispatchQueue.main.async { [weak self] in
+            guard let savedData = CoreDataService.shared.getAllCities().first
+            else { return }
+            self?.updateUI(data: savedData)
+        }
+    }
+    
+    func updateUI(data: City) {
+        timeOffset = Int(data.weather?.timeOffset ?? 0)
+        
+        setupBackground(data: data)
         setupData(data: data)
         setupHourlyForecast(data: data)
         setupDailyForecast(data: data)
@@ -85,131 +97,135 @@ private extension WeatherViewModel {
         setupAdditionalWeatherInfo(data: data)
     }
     
-    func setupData(data: WeatherData) {
-        self.alert = nil
-        self.hourlyForecast = []
-        self.dailyForecast = []
-        
-        self.cityName = data.city
-        self.temp = "\(Int(data.weatherModel.current.temp))°"
-        self.minTemp = "\(Int(data.weatherModel.daily.first?.temp.min ?? 0))"
-        self.maxTemp = "\(Int(data.weatherModel.daily.first?.temp.max ?? 0))"
-        self.currentTemp = data.weatherModel.current.temp
-        self.windSpeed = "\(data.weatherModel.current.windSpeed) km/h"
-        self.humidity = "\(Int(data.weatherModel.current.humidity))%"
-        self.weatherDescription = data.weatherModel.current.weather.first?.description
-        self.icon = data.weatherModel.current.weather.first?.icon
-        self.sunrise = DateFormatterService.shared.dateToString(
-            time: data.weatherModel.current.sunrise,
-            timezoneOffset: data.weatherModel.timeOffset,
-            dateType: .sunMove)
-        self.sunset = DateFormatterService.shared.dateToString(
-            time: data.weatherModel.current.sunset,
-            timezoneOffset: data.weatherModel.timeOffset,
-            dateType: .sunMove)
-        self.feelsLike = "\(Int(data.weatherModel.current.feelsLike))°"
-        
+    func setupBackground(data: City) {
+        let icon = data.weather?.icon
         self.topBackgroundColor = WeatherGradientModel().colors[icon ?? ""]?[0] ?? ""
         self.bottomBackgroundColor = WeatherGradientModel().colors[icon ?? ""]?[1] ?? ""
         self.spriteKitNodes = SpriteKitNodes().nodes[icon ?? ""] ?? []
     }
     
-    func setupHourlyForecast(data: WeatherData) {
-        data.weatherModel.hourly.forEach { hourly in
-            if self.hourlyForecast.count <= 23 {
-                let icon = self.iconsModel.iconsDict[hourly.weather.first?.icon ?? ""] ?? ""
-                let date = DateFormatterService.shared.dateToString(
-                    time: hourly.date,
-                    timezoneOffset: data.weatherModel.timeOffset,
-                    dateType: .hour)
-                let currentHour = DateFormatterService.shared.dateToString(
-                    time: Int(Date().timeIntervalSince1970),
-                    timezoneOffset: data.weatherModel.timeOffset,
-                    dateType: .hour)
-                let temp = "\(Int(hourly.temp))°"
-                let item = (
-                    icon: icon,
-                    date: date == currentHour ? "now".localizable : date,
-                    temp: temp)
+    func setupData(data: City) {
+        self.alert = nil
+        self.hourlyForecast = []
+        self.dailyForecast = []
+        
+        self.cityName = data.name
+        self.temp = "\(Int(data.weather?.temp ?? 0.0))°"
+        self.minTemp = "\(Int(data.weather?.minTemp ?? 0.0))"
+        self.maxTemp = "\(Int(data.weather?.maxTemp ?? 0.0))"
+        self.currentTemp = CGFloat(data.weather?.temp ?? 0.0)
+        self.windSpeed = "\(data.weather?.windSpeed ?? 0.0) km/h"
+        self.humidity = "\(Int(data.weather?.humidity ?? 0.0))%"
+        self.weatherDescription = data.weather?.weatherDescription ?? ""
+        self.icon = data.weather?.icon ?? ""
+        self.sunrise = DateFormatterService.shared.dateToString(
+            time: Int(data.weather?.sunrise ?? Int64(0.0)),
+            timezoneOffset: Int(data.weather?.timeOffset ?? Int64(0.0)),
+            dateType: .sunMove)
+        self.sunset = DateFormatterService.shared.dateToString(
+            time: Int(data.weather?.sunset ?? Int64(0.0)),
+            timezoneOffset: Int(data.weather?.timeOffset ?? Int64(0.0)),
+            dateType: .sunMove)
+        self.feelsLike = "\(Int(data.weather?.feelsLike ?? 0.0))°"
+    }
+    
+    func setupHourlyForecast(data: City) {
+        var hourlyWeather = data.weather?.hourly?.allObjects as? [Hourly]
+        hourlyWeather?.sort { $0.date < $1.date }
+        hourlyWeather?.enumerated().forEach { hourly in
+            let icon = self.iconsModel.iconsDict[hourly.element.icon ?? ""] ?? ""
+            let date = DateFormatterService.shared.dateToString(
+                time: Int(hourly.element.date),
+                timezoneOffset: timeOffset,
+                dateType: .hour)
+            let currentHour = DateFormatterService.shared.dateToString(
+                time: Int(Date().timeIntervalSince1970),
+                timezoneOffset: timeOffset,
+                dateType: .hour)
+            let temp = "\(Int(hourly.element.temp))°"
+            let item = (
+                icon: icon,
+                date: date == currentHour ? "now".localizable : date,
+                temp: temp)
+            if hourly.offset <= 23 {
                 self.hourlyForecast.append(item)
             }
         }
     }
     
-    func setupDailyForecast(data: WeatherData) {
-        data.weatherModel.daily.forEach { daily in
-            let icon = self.iconsModel.iconsDict[daily.weather.first?.icon ?? ""] ?? ""
+    func setupDailyForecast(data: City) {
+        var dailyWeather = data.weather?.daily?.allObjects as? [Daily]
+        dailyWeather?.sort { $0.date < $1.date }
+        dailyWeather?.enumerated().forEach { daily in
+            let icon = self.iconsModel.iconsDict[daily.element.icon ?? ""] ?? ""
             let date = DateFormatterService.shared.dateToString(
-                time: daily.date,
-                timezoneOffset: data.weatherModel.timeOffset,
+                time: Int(daily.element.date),
+                timezoneOffset: timeOffset,
                 dateType: .weekDay)
             let currentDay = DateFormatterService.shared.dateToString(
                 time: Int(Date().timeIntervalSince1970),
-                timezoneOffset: data.weatherModel.timeOffset,
+                timezoneOffset: timeOffset,
                 dateType: .weekDay)
-            let mintemp: CGFloat = daily.temp.min
-            let maxTemp: CGFloat = daily.temp.max
-            
+            let mintemp: CGFloat = daily.element.minTemp
+            let maxTemp: CGFloat = daily.element.maxTemp
             if minWeekTemp > mintemp {
                 minWeekTemp = mintemp
             }
-            
             if maxWeekTemp < maxTemp {
                 maxWeekTemp = maxTemp
             }
-            
             let isCurrentDay = date == currentDay ? true : false
-            
             let item = (
                 icon: icon,
                 date: isCurrentDay ? "today".localizable : date.capitalizingFirstLetter(),
                 minTemp: mintemp,
                 maxTemp: maxTemp,
                 isCurrentDay: isCurrentDay)
-            
             if self.dailyForecast.count < 7 {
                 self.dailyForecast.append(item)
             }
         }
     }
     
-    func setupAlerts(data: WeatherData) {
-        if data.weatherModel.alerts != nil {
-            let alertEvent = data.weatherModel.alerts?.last?.event ?? ""
-            let alertDescription = data.weatherModel.alerts?.last?.description ?? ""
+    func setupAlerts(data: City) {
+        if data.weather?.alert != nil {
+            let alertEvent = data.alert?.event ?? ""
+            let alertDescription = data.alert?.alertDescription ?? ""
             let alertStartDate = DateFormatterService.shared.dateToString(
-                time: data.weatherModel.alerts?.last?.start ?? 0,
-                timezoneOffset: data.weatherModel.timeOffset,
+                time: Int(data.alert?.start ?? 0),
+                timezoneOffset: timeOffset,
                 dateType: .sunMove)
             let alertEndDate = DateFormatterService.shared.dateToString(
-                time: data.weatherModel.alerts?.last?.end ?? 0,
-                timezoneOffset: data.weatherModel.timeOffset,
+                time: Int(data.alert?.end ?? 0),
+                timezoneOffset: timeOffset,
                 dateType: .sunMove)
-            self.alert = String(format: NSLocalizedString(
-                "alert", comment: ""),
-                                alertEvent,
-                                alertDescription,
-                                alertStartDate,
-                                alertEndDate)
+            self.alert = String(
+                format: NSLocalizedString(
+                    "alert",
+                    comment: ""),
+                alertEvent,
+                alertDescription,
+                alertStartDate,
+                alertEndDate)
         }
     }
     
-    func setupAdditionalWeatherInfo(data: WeatherData) {
+    func setupAdditionalWeatherInfo(data: City) {
         setupFeelsLikeInfo(data: data)
         setupSunsetInfo(data: data)
     }
     
-    func setupFeelsLikeInfo(data: WeatherData) {
-        let actualTemp = Int(data.weatherModel.current.temp)
-        let feelsLikeTemp = Int(data.weatherModel.current.feelsLike)
+    func setupFeelsLikeInfo(data: City) {
+        let actualTemp = Int(data.weather?.temp ?? 0.0)
+        let feelsLikeTemp = Int(data.weather?.feelsLike ?? 0.0)
         self.isFeelsLikeCoolerTemp = actualTemp > feelsLikeTemp ? true : false
     }
     
-    func setupSunsetInfo(data: WeatherData) {
+    func setupSunsetInfo(data: City) {
         let currentEpochTime = Int(Date().timeIntervalSince1970 * 1000.0)
         let currentHour = DateFormatterService.shared.dateToString(
             time: currentEpochTime,
-            timezoneOffset: data.weatherModel.timeOffset,
+            timezoneOffset: Int(data.weather?.timeOffset ?? 0),
             dateType: .comparisonHours)
         isAMtime = Int(currentHour) ?? 0 < 12 ? true : false
     }

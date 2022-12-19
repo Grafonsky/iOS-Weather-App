@@ -19,6 +19,8 @@ extension WeatherData {
             city: "Johannesburg",
             weatherModel: .init(
                 timeOffset: -14400,
+                lat: 22,
+                lon: 55,
                 current: .init(
                     temp: 294.69,
                     windSpeed: 2.68,
