@@ -21,6 +21,8 @@ final class LocationService: NSObject, ObservableObject {
     var statusUpdate: PassthroughSubject<CLAuthorizationStatus, Never> = .init()
     var currentLocation: Coordinate?
     var currentCity: String = "—"
+    var currentLat: Double = 0.0
+    var currentLon: Double = 0.0
     
     var status: CLAuthorizationStatus {
         return service.authorizationStatus
@@ -49,23 +51,25 @@ final class LocationService: NSObject, ObservableObject {
 extension LocationService: CLLocationManagerDelegate {
     
     public func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-            guard let location = locations.first
-            else { return }
-            
-            let lat = location.coordinate.latitude
-            let lon = location.coordinate.longitude
-            
-            geoCoder.reverseGeocodeLocation(location) { [weak self] placemark,_ in
-                if let city = placemark?.first?.locality {
-                    self?.currentCity = city
-                    LocationService._currentCity.send(city)
-                }
+        guard let location = locations.first
+        else { return }
+        
+        let lat = location.coordinate.latitude
+        let lon = location.coordinate.longitude
+        currentLat = lat
+        currentLon = lon
+        
+        geoCoder.reverseGeocodeLocation(location) { [weak self] placemark,_ in
+            if let city = placemark?.first?.locality {
+                self?.currentCity = city
+                LocationService._currentCity.send(city)
             }
-            let coordinate = (lat: lat, lon: lon)
-            currentLocation = coordinate
-            currentLocationUpdate.send(coordinate)
-            currentLocationUpdate.send(completion: .finished)
         }
+        let coordinate = (lat: lat, lon: lon)
+        currentLocation = coordinate
+        currentLocationUpdate.send(coordinate)
+        currentLocationUpdate.send(completion: .finished)
+    }
     
     public func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
         guard service.authorizationStatus != .notDetermined

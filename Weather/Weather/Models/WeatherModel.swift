@@ -11,13 +11,15 @@ import Foundation
 
 struct WeatherModel: Decodable {
     let timeOffset: Int
+    let lat: Double
+    let lon: Double
     let current: CurrentWeather
     let hourly: [HourlyWeather]
     let daily: [DailyWeather]
     let alerts: [Alerts]?
     
     enum CodingKeys: String, CodingKey {
-        case current, hourly, daily, alerts
+        case current, hourly, daily, alerts, lat, lon
         case timeOffset = "timezone_offset"
     }
 }

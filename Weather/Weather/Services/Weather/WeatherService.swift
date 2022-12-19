@@ -29,6 +29,7 @@ final class WeatherService: HTTPClient {
         let result = await getTemp(lat: location.lat, lon: location.lon)
         switch result {
         case .success(let weather):
+            CoreDataService.shared.saveCurrentCity(weatherData: weather)
             return .success(weather)
         case .failure(let error):
             return .failure(.network(error))
@@ -47,9 +48,19 @@ private extension WeatherService {
             let weatherData: WeatherData = .init(
                 city: locationService.currentCity,
                 weatherModel: weather)
+            saveCurrentLocationWeather(weatherData: weatherData)
             return .success(weatherData)
         case .failure(let error):
             return .failure(error)
         }
+    }
+}
+
+private extension WeatherService {
+    
+    func saveCurrentLocationWeather(weatherData: WeatherData) {
+        let currentLat = locationService.currentLat
+        let currentLon = locationService.currentLon
+        let allCities = CoreDataService.shared.getAllCities()
     }
 }
