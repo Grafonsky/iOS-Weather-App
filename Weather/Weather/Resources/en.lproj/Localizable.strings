@@ -21,3 +21,8 @@
 "windMakeItColder" = "Wind is making it feel colder";
 "sunriseTime" = "Sunrise: %@";
 "sunsetTime" = "Sunset: %@";
+"search" = "Search";
+"searchBar" = "Search...";
+"favCities" = "Favorite cities";
+"cancel" = "Cancel";
+"startTyping" = "Start typing a city name";
