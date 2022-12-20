@@ -26,23 +26,43 @@ struct FavoritesView: View {
                     SearchBarView(
                         searchText: $viewModel.searchText,
                         isSearching: $viewModel.isSearching,
-                        isSearchBarExpand: $isSearchBarExpand)
+                        isSearchBarExpand: $isSearchBarExpand,
+                        searchTextSubject: $viewModel.searchTextSubject)
                     
                     if $viewModel.isSearching.wrappedValue {
                         ZStack {
                             Rectangle()
                                 .foregroundColor(.init(hex: "1d1d1d"))
-                            
                             if viewModel.searchText.isEmpty {
                                 Text("startTyping".localizable)
                                     .font(.customFont(weight: .bold, size: 15))
                                     .foregroundColor(.gray)
+                            } else {
+                                List {
+                                    ForEach($viewModel.searchableCities, id: \.id) { city in
+                                        Button {
+                                            viewModel.addCitySubject.send(city.wrappedValue)
+                                            
+                                            print("SELECTED CITY")
+                                            
+                                        } label: {
+                                            HStack {
+                                                let name = city.name.wrappedValue
+                                                let region = city.region.wrappedValue
+                                                let country = city.country.wrappedValue
+                                                
+                                                Text(getFlag(from: city.code.wrappedValue))
+                                                Text("\(name), \(region), \(country)")
+                                            }
+                                        }
+                                    }
+                                }
                             }
                         }
                     } else {
                         ScrollView {
                             VStack {
-                                ForEach($viewModel.cities, id: \.id) { item in
+                                ForEach($viewModel.favoriteCities, id: \.id) { item in
                                     
                                     let itemWrapped = item.wrappedValue
                                     let title = itemWrapped.name ?? ""
@@ -51,13 +71,15 @@ struct FavoritesView: View {
                                     let currentTemp = Int(itemWrapped.weather?.temp ?? 0.0)
                                     let minTemp = Int(itemWrapped.weather?.maxTemp ?? 0.0)
                                     let maxTemp = Int(itemWrapped.weather?.minTemp ?? 0.0)
+                                    let isCurrentLocation = itemWrapped == viewModel.favoriteCities.first
                                     
                                     FavoriteCityCell(
                                         title: title,
                                         subtitle: subtitle,
                                         weatherDescription: weatherDescription,
                                         currentTemp: currentTemp,
-                                        minMaxTemp: "H:\(maxTemp)° L:\(minTemp)°")
+                                        minMaxTemp: "H:\(maxTemp)° L:\(minTemp)°",
+                                        isCurrentLocation: isCurrentLocation)
                                 }
                             }
                             .background(
@@ -117,7 +139,7 @@ struct ViewOffsetKey: PreferenceKey {
 
 struct FavoritesView_Previews: PreviewProvider {
     static var previews: some View {
-        FavoritesView(viewModel: .init())
+        FavoritesView(viewModel: .init(locationService: .init()))
     }
 }
 
@@ -128,5 +150,14 @@ private extension FavoritesView {
             timezoneOffset: timeOffset,
             dateType: .sunMove)
         return currentTime
+    }
+    
+    func getFlag(from countryCode: String) -> String {
+        countryCode
+            .unicodeScalars
+            .map({ 127397 + $0.value })
+            .compactMap(UnicodeScalar.init)
+            .map(String.init)
+            .joined()
     }
 }

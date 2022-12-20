@@ -9,9 +9,12 @@ import SwiftUI
 
 @main
 struct WeatherApp: App {
+    
+    let locationService: LocationService = .init()
+    
     var body: some Scene {
         WindowGroup {
-            FavoritesView(viewModel: .init())
+            FavoritesView(viewModel: .init(locationService: locationService))
         }
     }
 }
