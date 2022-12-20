@@ -44,13 +44,11 @@ final class WeatherViewModel: ObservableObject {
     
     private var currentCityStore: AnyCancellable?
     
-    private let locationService: LocationService
     private let weatherService: WeatherService
     private let iconsModel: WeatherIconsModel
     
-    init() {
-        self.locationService = .init()
-        self.weatherService = .init(locationService: self.locationService)
+    init(locationService: LocationService) {
+        self.weatherService = .init(locationService: locationService)
         self.iconsModel = .init()
         
         LocationService._currentCity

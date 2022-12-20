@@ -6,12 +6,14 @@
 //
 
 import SwiftUI
+import Combine
 
 struct SearchBarView: View {
     
     @Binding var searchText: String
     @Binding var isSearching: Bool
     @Binding var isSearchBarExpand: Bool
+    @Binding var searchTextSubject: PassthroughSubject<String, Never>
     
     var body: some View {
         ZStack {
@@ -29,6 +31,9 @@ struct SearchBarView: View {
                     withAnimation {
                         isSearching = false
                     }
+                }
+                .onChange(of: searchText) { newValue in
+                    searchTextSubject.send(newValue)
                 }
             }
             .foregroundColor(.gray)
@@ -48,7 +53,8 @@ struct SearchBarView_Previews: PreviewProvider {
             SearchBarView(
                 searchText: .constant(""),
                 isSearching: .constant(false),
-                isSearchBarExpand: .constant(true))
+                isSearchBarExpand: .constant(true),
+                searchTextSubject: .constant(.init()))
         }
     }
 }

@@ -14,6 +14,7 @@ struct FavoriteCityCell: View {
     @State var weatherDescription: String
     @State var currentTemp: Int
     @State var minMaxTemp: String
+    @State var isCurrentLocation: Bool
     
     var body: some View {
         
@@ -22,10 +23,10 @@ struct FavoriteCityCell: View {
                 .foregroundColor(.gray)
             HStack {
                 VStack(alignment: .leading) {
-                    Text(title)
+                    Text(isCurrentLocation ? "myLocation".localizable : title)
                         .font(.customFont(weight: .heavy, size: 28))
                         .foregroundColor(.white)
-                    Text(subtitle)
+                    Text(isCurrentLocation ? title : subtitle)
                         .font(.customFont(weight: .bold, size: 15))
                         .foregroundColor(.white)
                         .opacity(0.6)
@@ -67,7 +68,8 @@ struct FavoriteCityCell_Previews: PreviewProvider {
                 subtitle: "Tbilisi",
                 weatherDescription: "Cloudy",
                 currentTemp: 5,
-                minMaxTemp: "H:7° L:3°")
+                minMaxTemp: "H:7° L:3°",
+                isCurrentLocation: true)
         }
     }
 }
