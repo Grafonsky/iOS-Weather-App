@@ -15,6 +15,9 @@ struct FavoritesView: View {
     @State private var isSearchBarExpand = true
     @State private var offset: CGFloat = .zero
     
+    @Binding var isFavoritesSheetShow: Bool
+    @Binding var selectedCity: Int
+    
     var body: some View {
         
         NavigationView {
@@ -27,12 +30,15 @@ struct FavoritesView: View {
                         searchText: $viewModel.searchText,
                         isSearching: $viewModel.isSearching,
                         isSearchBarExpand: $isSearchBarExpand,
+                        isResponseReceived: $viewModel.isResponseReceived,
                         searchTextSubject: $viewModel.searchTextSubject)
                     
                     if $viewModel.isSearching.wrappedValue {
+                        
                         ZStack {
                             Rectangle()
                                 .foregroundColor(.init(hex: "1d1d1d"))
+                            
                             if viewModel.searchText.isEmpty {
                                 Text("startTyping".localizable)
                                     .font(.customFont(weight: .bold, size: 15))
@@ -42,9 +48,10 @@ struct FavoritesView: View {
                                     ForEach($viewModel.searchableCities, id: \.id) { city in
                                         Button {
                                             viewModel.addCitySubject.send(city.wrappedValue)
-                                            
-                                            print("SELECTED CITY")
-                                            
+                                            withAnimation {
+                                                viewModel.isSearching = false
+                                                viewModel.searchText = ""
+                                            }
                                         } label: {
                                             HStack {
                                                 let name = city.name.wrappedValue
@@ -57,31 +64,43 @@ struct FavoritesView: View {
                                         }
                                     }
                                 }
+                                
+                                if !$viewModel.isResponseReceived.wrappedValue {
+                                    LoaderView(isLoaded: $viewModel.isResponseReceived)
+                                }
                             }
                         }
                     } else {
-                        ScrollView {
-                            VStack {
-                                ForEach($viewModel.favoriteCities, id: \.id) { item in
-                                    
-                                    let itemWrapped = item.wrappedValue
-                                    let title = itemWrapped.name ?? ""
-                                    let subtitle = getTime(timeOffset: Int(itemWrapped.weather?.timeOffset ?? 0))
-                                    let weatherDescription = itemWrapped.weather?.weatherDescription?.capitalizingFirstLetter() ?? ""
-                                    let currentTemp = Int(itemWrapped.weather?.temp ?? 0.0)
-                                    let minTemp = Int(itemWrapped.weather?.maxTemp ?? 0.0)
-                                    let maxTemp = Int(itemWrapped.weather?.minTemp ?? 0.0)
-                                    let isCurrentLocation = itemWrapped == viewModel.favoriteCities.first
-                                    
-                                    FavoriteCityCell(
-                                        title: title,
-                                        subtitle: subtitle,
-                                        weatherDescription: weatherDescription,
-                                        currentTemp: currentTemp,
-                                        minMaxTemp: "H:\(maxTemp)° L:\(minTemp)°",
-                                        isCurrentLocation: isCurrentLocation)
+                        
+                        List {
+                            ForEach(0..<$viewModel.favoriteCities.count) { i in
+                                let itemWrapped = $viewModel.favoriteCities[i].wrappedValue
+                                let title = itemWrapped.name ?? ""
+                                let subtitle = getTime(timeOffset: Int(itemWrapped.weather?.timeOffset ?? 0))
+                                let weatherDescription = itemWrapped.weather?.weatherDescription?.capitalizingFirstLetter() ?? ""
+                                let currentTemp = Int(itemWrapped.weather?.temp ?? 0.0)
+                                let minTemp = Int(itemWrapped.weather?.maxTemp ?? 0.0)
+                                let maxTemp = Int(itemWrapped.weather?.minTemp ?? 0.0)
+                                let isCurrentLocation = itemWrapped == viewModel.favoriteCities.first
+                                let icon = itemWrapped.weather?.icon ?? ""
+                                
+                                FavoriteCityCell(
+                                    title: title,
+                                    subtitle: subtitle,
+                                    weatherDescription: weatherDescription,
+                                    currentTemp: currentTemp,
+                                    minMaxTemp: "H:\(maxTemp)° L:\(minTemp)°",
+                                    isCurrentLocation: isCurrentLocation,
+                                    icon: icon)
+                                .onTapGesture {
+                                    isFavoritesSheetShow = false
+                                    selectedCity = i
                                 }
+                                .deleteDisabled(isCurrentLocation)
                             }
+                            
+                            .onDelete(perform: delete)
+                            .listRowBackground(Color.clear)
                             .background(
                                 GeometryReader {
                                     Color.clear.preference(
@@ -102,6 +121,7 @@ struct FavoritesView: View {
                                 }
                             }
                         }
+                        .scrollContentBackground(.hidden)
                         .coordinateSpace(name: "scroll")
                         .gesture(DragGesture()
                             .onChanged({ _ in
@@ -109,6 +129,7 @@ struct FavoritesView: View {
                             })
                         )
                     }
+                    
                 }
                 .toolbar {
                     if $viewModel.isSearching.wrappedValue {
@@ -125,6 +146,11 @@ struct FavoritesView: View {
             }
         }
     }
+    
+    func delete(at offsets: IndexSet) {
+        let index = offsets.first ?? 0
+        viewModel.removeCitySubject.send(index)
+    }
 }
 
 struct ViewOffsetKey: PreferenceKey {
@@ -139,7 +165,10 @@ struct ViewOffsetKey: PreferenceKey {
 
 struct FavoritesView_Previews: PreviewProvider {
     static var previews: some View {
-        FavoritesView(viewModel: .init(locationService: .init()))
+        FavoritesView(
+            viewModel: .init(weatherService: .init(locationService: .init())),
+            isFavoritesSheetShow: .constant(false),
+            selectedCity: .constant(0))
     }
 }
 

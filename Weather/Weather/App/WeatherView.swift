@@ -15,10 +15,13 @@ struct WeatherView: View {
         
         ZStack {
             
-            BackgroundView(
-                topBackgroundGradient: $viewModel.topBackgroundColor,
-                bottomBackgroundGradient: $viewModel.bottomBackgroundColor,
-                spriteKitNodes: $viewModel.spriteKitNodes)
+            // FIXIT: - Temporarily hid background until i optimise this view
+            
+            //            BackgroundView(
+            //                topBackgroundGradient: $viewModel.topBackgroundColor,
+            //                bottomBackgroundGradient: $viewModel.bottomBackgroundColor,
+            //                spriteKitNodes: $viewModel.spriteKitNodes,
+            //                sceneState: .fullscreen)
             
             ScrollView(showsIndicators: false) {
                 VStack(spacing: 0) {
@@ -33,8 +36,8 @@ struct WeatherView: View {
                         .shadow(color: Color.black.opacity(0.4), radius: 5)
                     Text(String(format: NSLocalizedString(
                         "highestLowestTemps", comment: ""),
-                                $viewModel.maxTemp.wrappedValue ?? "",
-                                $viewModel.minTemp.wrappedValue ?? ""))
+                                $viewModel.maxTemp.wrappedValue ?? "—",
+                                $viewModel.minTemp.wrappedValue ?? "—"))
                     .font(.customFont(weight: .medium, size: 22))
                     .shadow(color: Color.black.opacity(0.4), radius: 5)
                 }
@@ -45,14 +48,12 @@ struct WeatherView: View {
                     HourlyForecastView(
                         hourly: $viewModel.hourlyForecast,
                         alert: $viewModel.alert)
-                    
                     DailyForecastView(
                         daily: $viewModel.dailyForecast,
                         minWeekTemp: $viewModel.minWeekTemp,
                         maxWeekTemp: $viewModel.maxWeekTemp,
                         currentTemp: $viewModel.currentTemp)
                 }
-                
                 VStack {
                     HStack {
                         WeatherDetailsCellView(
@@ -64,7 +65,6 @@ struct WeatherView: View {
                             addInfo: .constant(nil),
                             weatherData: $viewModel.humidity)
                     }
-                    
                     HStack {
                         WeatherDetailsCellView(
                             detailsType: .wind,
@@ -78,6 +78,7 @@ struct WeatherView: View {
                 }
                 Spacer()
             }
+            LoaderView(isLoaded: $viewModel.isLoaded)
         }
         .preferredColorScheme(.dark)
     }
@@ -85,6 +86,9 @@ struct WeatherView: View {
 
 struct WeatherView_Previews: PreviewProvider {
     static var previews: some View {
-        WeatherView(viewModel: .init(locationService: .init()))
+        WeatherView(
+            viewModel: .init(
+                weatherType: .current,
+                locationService: .init()))
     }
 }
