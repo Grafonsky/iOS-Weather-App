@@ -8,8 +8,13 @@
 import UIKit
 import SpriteKit
 
+enum SceneState {
+    case fullscreen, preview
+}
+
 final class SpriteScene: SKScene {
     
+    var sceneState: SceneState = .fullscreen
     var nodeName: String = ""
     var topBackgroundGradientColor: UIColor = .clear
     var bottomBackgroundGradientColor: UIColor = .clear
@@ -27,12 +32,13 @@ final class SpriteScene: SKScene {
     convenience init(
         nodeName: String,
         topBackgroundGradientColor: UIColor,
-        bottomBackgroundGradientColor: UIColor) {
-            
+        bottomBackgroundGradientColor: UIColor,
+        sceneState: SceneState) {
             self.init(size: .init(width: UIScreen.screenWidth, height: UIScreen.screenHeight))
             self.nodeName = nodeName
             self.topBackgroundGradientColor = topBackgroundGradientColor
             self.bottomBackgroundGradientColor = bottomBackgroundGradientColor
+            self.sceneState = sceneState
             addScene()
         }
 }
@@ -59,6 +65,8 @@ extension SpriteScene {
         
         guard let animation = SKSpriteNode(fileNamed: nodeName) else { return }
         backgroundSprite.addChild(animation)
-        animation.position = CGPoint(x: UIScreen.screenWidth / 2, y: UIScreen.screenHeight / 2)
+        animation.position = CGPoint(
+            x: UIScreen.screenWidth / 2,
+            y: sceneState == .fullscreen ? UIScreen.screenHeight / 2 : -UIScreen.screenHeight / 3)
     }
 }

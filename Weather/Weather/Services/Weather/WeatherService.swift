@@ -35,6 +35,37 @@ final class WeatherService: HTTPClient {
             return .failure(.network(error))
         }
     }
+    
+    func getTemp(cityData: CityData) async -> Result<WeatherData, HTTPRequestError> {
+        let result = await sendRequest(
+            endpoint: WeatherEndpoint.current(lat: cityData.lat, lon: cityData.lon),
+            responseModel: WeatherModel.self)
+        switch result {
+        case .success(let weather):
+            let weatherData: WeatherData = .init(
+                city: cityData.name,
+                weatherModel: weather)
+            CoreDataService.shared.saveFavoriteCity(weatherData: weatherData)
+            return .success(weatherData)
+        case .failure(let error):
+            return .failure(error)
+        }
+    }
+    
+    func getTemp(cityData: City) async -> Result<WeatherData, HTTPRequestError> {
+        let result = await sendRequest(
+            endpoint: WeatherEndpoint.current(lat: cityData.lat, lon: cityData.lon),
+            responseModel: WeatherModel.self)
+        switch result {
+        case .success(let weather):
+            let weatherData: WeatherData = .init(
+                city: cityData.name ?? "",
+                weatherModel: weather)
+            return .success(weatherData)
+        case .failure(let error):
+            return .failure(error)
+        }
+    }
 }
 
 private extension WeatherService {
@@ -48,19 +79,9 @@ private extension WeatherService {
             let weatherData: WeatherData = .init(
                 city: locationService.currentCity,
                 weatherModel: weather)
-            saveCurrentLocationWeather(weatherData: weatherData)
             return .success(weatherData)
         case .failure(let error):
             return .failure(error)
         }
-    }
-}
-
-private extension WeatherService {
-    
-    func saveCurrentLocationWeather(weatherData: WeatherData) {
-        let currentLat = locationService.currentLat
-        let currentLon = locationService.currentLon
-        let allCities = CoreDataService.shared.getAllCities()
     }
 }

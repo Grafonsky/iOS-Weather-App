@@ -70,6 +70,28 @@ extension CoreDataService {
         let _: City? = cityDataToCoreData(weatherData: weatherData)
         saveWeather()
     }
+    
+    func removeCity(cityName: String) {
+        let context = persistentContainer.viewContext
+        let allCities = getAllCities()
+        var selectedCity: City? = nil
+        allCities.forEach { city in
+            if city.name == cityName {
+                selectedCity = city
+            }
+        }
+        
+        guard let selectedCity = selectedCity,
+              selectedCity != allCities.first
+        else { return }
+        context.delete(selectedCity)
+        saveWeather()
+    }
+    
+    func updateCity(city: City, weatherData: WeatherData) {
+        city.weather = weatherDataToCoreData(weatherData: weatherData)
+        saveWeather()
+    }
 }
 
 private extension CoreDataService {
@@ -78,6 +100,7 @@ private extension CoreDataService {
         let context = persistentContainer.viewContext
         let city: City = .init(context: context)
         
+        city.name = weatherData.city
         city.lat = weatherData.weatherModel.lat
         city.lon = weatherData.weatherModel.lon
         city.weather = weatherDataToCoreData(weatherData: weatherData)

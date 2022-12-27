@@ -9,9 +9,18 @@ import SwiftUI
 
 @main
 struct WeatherApp: App {
+    
+    @ObservedObject var viewModel: RootViewModel
+    
+    init() {
+        self.viewModel = .init()
+    }
+    
     var body: some Scene {
         WindowGroup {
-            WeatherView(viewModel: .init())
+            RootView(
+                viewModel: viewModel,
+                locationService: viewModel.locationService)
         }
     }
 }

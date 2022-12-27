@@ -8,6 +8,23 @@
 import SwiftUI
 import Combine
 
+enum WeatherType {
+    case current, favorite(data: City)
+    
+    var cityData: City? {
+        switch self {
+        case .current:
+            return nil
+        case .favorite(let city):
+            return city
+        }
+    }
+    
+    static func ==(lhs: WeatherType, rhs: WeatherType) -> Bool {
+        return lhs.cityData?.weather == rhs.cityData?.weather
+    }
+}
+
 final class WeatherViewModel: ObservableObject {
     
     typealias HourlyForecast = (icon: String, date: String, temp: String)
@@ -21,6 +38,8 @@ final class WeatherViewModel: ObservableObject {
     @Published private(set) var weatherDescription: String?
     @Published private(set) var icon: String?
     
+    @Published var weatherType: WeatherType = .current
+    @Published var isLoaded: Bool = false
     @Published var dailyForecast: [DailyForecast] = []
     @Published var hourlyForecast: [HourlyForecast] = []
     @Published var alert: String?
@@ -42,35 +61,53 @@ final class WeatherViewModel: ObservableObject {
     var isAMtime: Bool = false
     var timeOffset: Int = 0
     
-    private var currentCityStore: AnyCancellable?
-    
-    private let locationService: LocationService
     private let weatherService: WeatherService
+    private let coreDataService: CoreDataService
     private let iconsModel: WeatherIconsModel
     
-    init() {
-        self.locationService = .init()
-        self.weatherService = .init(locationService: self.locationService)
+    init(weatherType: WeatherType, locationService: LocationService) {
         self.iconsModel = .init()
+        self.weatherService = .init(locationService: locationService)
+        self.coreDataService = CoreDataService.shared
         
-        LocationService._currentCity
-            .receive(on: DispatchQueue.main)
-            .sink(receiveValue: { [weak self] _ in
-                self?.updateData()
-            })
-            .store(in: &bag)
+        switch weatherType {
+        case .current:
+            LocationService._currentCity
+                .receive(on: DispatchQueue.main)
+                .sink(receiveValue: { [weak self] _ in
+                    self?.loadFromCoreData(weatherType: weatherType)
+                    self?.updateData()
+                })
+                .store(in: &bag)
+        case .favorite(_):
+            guard let cityData = weatherType.cityData
+            else { break }
+            self.updateUI(data: cityData)
+            Task {
+                let weather = await weatherService.getTemp(cityData: cityData)
+                switch weather {
+                case .success(let weatherData):
+                    coreDataService.updateCity(
+                        city: cityData,
+                        weatherData: weatherData)
+                    self.updateUI(data: cityData)
+                case .failure(let failure):
+                    print("INSERT FAILURE ALERT")
+                    break
+                }
+            }
+        }
     }
 }
 
 private extension WeatherViewModel {
     
     func updateData() {
-        loadDataFromCoreData()
         Task {
             let weather = await weatherService.getCurrentTemp()
             switch weather {
             case .success(_):
-                loadDataFromCoreData()
+                loadFromCoreData(weatherType: .current)
             case .failure(let error):
                 print("INSERT FAILURE ALERT")
                 break
@@ -78,23 +115,30 @@ private extension WeatherViewModel {
         }
     }
     
-    func loadDataFromCoreData() {
+    func loadFromCoreData(weatherType: WeatherType) {
         DispatchQueue.main.async { [weak self] in
-            guard let savedData = CoreDataService.shared.getAllCities().first
-            else { return }
-            self?.updateUI(data: savedData)
+            switch weatherType {
+            case .current:
+                guard let savedData = CoreDataService.shared.getAllCities().first
+                else { return }
+                self?.updateUI(data: savedData)
+            case .favorite(let data):
+                self?.updateUI(data: data)
+            }
         }
     }
     
     func updateUI(data: City) {
-        timeOffset = Int(data.weather?.timeOffset ?? 0)
-        
-        setupBackground(data: data)
-        setupData(data: data)
-        setupHourlyForecast(data: data)
-        setupDailyForecast(data: data)
-        setupAlerts(data: data)
-        setupAdditionalWeatherInfo(data: data)
+        DispatchQueue.main.async { [weak self] in
+            self?.timeOffset = Int(data.weather?.timeOffset ?? 0)
+            self?.setupBackground(data: data)
+            self?.setupData(data: data)
+            self?.setupHourlyForecast(data: data)
+            self?.setupDailyForecast(data: data)
+            self?.setupAlerts(data: data)
+            self?.setupAdditionalWeatherInfo(data: data)
+            self?.isLoaded = true
+        }
     }
     
     func setupBackground(data: City) {
