@@ -13,6 +13,7 @@ struct SearchBarView: View {
     @Binding var searchText: String
     @Binding var isSearching: Bool
     @Binding var isSearchBarExpand: Bool
+    @Binding var isResponseReceived: Bool
     @Binding var searchTextSubject: PassthroughSubject<String, Never>
     
     var body: some View {
@@ -33,6 +34,7 @@ struct SearchBarView: View {
                     }
                 }
                 .onChange(of: searchText) { newValue in
+                    isResponseReceived = false
                     searchTextSubject.send(newValue)
                 }
             }
@@ -54,6 +56,7 @@ struct SearchBarView_Previews: PreviewProvider {
                 searchText: .constant(""),
                 isSearching: .constant(false),
                 isSearchBarExpand: .constant(true),
+                isResponseReceived: .constant(true),
                 searchTextSubject: .constant(.init()))
         }
     }

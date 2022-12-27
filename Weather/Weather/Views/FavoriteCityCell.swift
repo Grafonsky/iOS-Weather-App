@@ -15,12 +15,24 @@ struct FavoriteCityCell: View {
     @State var currentTemp: Int
     @State var minMaxTemp: String
     @State var isCurrentLocation: Bool
+    @State var icon: String
     
     var body: some View {
         
         ZStack {
-            Rectangle()
-                .foregroundColor(.gray)
+            
+            // FIXIT: - Temporarily hid background until i optimise this view
+            
+            //            let topBackgroundGradient = WeatherGradientModel().colors[icon]?[0] ?? ""
+            //            let bottomBackgroundGradient = WeatherGradientModel().colors[icon]?[1] ?? ""
+            //            let spriteKitNodes = SpriteKitNodes().nodes[icon] ?? []
+            //
+            //            BackgroundView(
+            //                topBackgroundGradient: .constant(topBackgroundGradient),
+            //                bottomBackgroundGradient: .constant(bottomBackgroundGradient),
+            //                spriteKitNodes: .constant(spriteKitNodes),
+            //                sceneState: .preview)
+            
             HStack {
                 VStack(alignment: .leading) {
                     Text(isCurrentLocation ? "myLocation".localizable : title)
@@ -69,7 +81,8 @@ struct FavoriteCityCell_Previews: PreviewProvider {
                 weatherDescription: "Cloudy",
                 currentTemp: 5,
                 minMaxTemp: "H:7° L:3°",
-                isCurrentLocation: true)
+                isCurrentLocation: true,
+                icon: "01n")
         }
     }
 }

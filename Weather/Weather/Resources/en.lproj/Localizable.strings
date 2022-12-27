@@ -8,22 +8,24 @@
 
 // MARK: - v2.0 -
 
-"highestLowestTemps" = "H: %@° L: %@°";
-"now" = "Now";
-"today" = "Today";
-"alert" = "%@ %@ from %@ to %@";
-"dailyForecast" = "Daily forecast";
-"wind" = "Wind";
-"humidity" = "Humidity";
-"feelsLike" = "Feels like";
-"sunrise" = "Sunrise";
-"sunset" = "Sunset";
-"windMakeItColder" = "Wind is making it feel colder";
-"sunriseTime" = "Sunrise: %@";
-"sunsetTime" = "Sunset: %@";
-"search" = "Search";
-"searchBar" = "Search...";
-"favCities" = "Favorite cities";
-"cancel" = "Cancel";
-"startTyping" = "Start typing a city name";
-"myLocation" = "My Location";
+"highestLowestTemps"                        = "H: %@° L: %@°";
+"now"                                       = "Now";
+"today"                                     = "Today";
+"alert"                                     = "%@ %@ from %@ to %@";
+"dailyForecast"                             = "Daily forecast";
+"wind"                                      = "Wind";
+"humidity"                                  = "Humidity";
+"feelsLike"                                 = "Feels like";
+"sunrise"                                   = "Sunrise";
+"sunset"                                    = "Sunset";
+"windMakeItColder"                          = "Wind is making it feel colder";
+"sunriseTime"                               = "Sunrise: %@";
+"sunsetTime"                                = "Sunset: %@";
+"search"                                    = "Search";
+"searchBar"                                 = "Search...";
+"favCities"                                 = "Favorite cities";
+"cancel"                                    = "Cancel";
+"startTyping"                               = "Start typing a city name";
+"myLocation"                                = "My Location";
+"firstLaunchLocationAccess"                 = "Allow access to your location so app can display the weather";
+"subsequentLaunchLocationAccess"            = "You have denied access to your location.\nGo to settings and change access settings";
