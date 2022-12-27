@@ -56,6 +56,8 @@ private extension FavoritesViewModel {
             .debounce(for: .seconds(1), scheduler: DispatchQueue.main)
             .sink { [unowned self] newValue in
                 Task {
+                    guard !newValue.isEmpty
+                    else { return }
                     let result = await CitiesService.shared.getCitiesList(nameRequest: newValue)
                     switch result {
                     case .success(let success):
@@ -73,6 +75,7 @@ private extension FavoritesViewModel {
         addCitySubject
             .receive(on: DispatchQueue.main)
             .sink { [unowned self] city in
+                UIApplication.shared.dismissKeyboard()
                 Task {
                     await weatherService.getTemp(cityData: city)
                     updateFavorites()
@@ -83,7 +86,8 @@ private extension FavoritesViewModel {
         removeCitySubject
             .receive(on: DispatchQueue.main)
             .sink { [unowned self] cityIndex in
-                guard let cityName = favoriteCities[cityIndex].name
+                let allCities = coreDataService.getAllCities()
+                guard let cityName = allCities[cityIndex].name
                 else { return }
                 coreDataService.removeCity(cityName: cityName)
             }

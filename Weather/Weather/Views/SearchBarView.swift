@@ -12,7 +12,6 @@ struct SearchBarView: View {
     
     @Binding var searchText: String
     @Binding var isSearching: Bool
-    @Binding var isSearchBarExpand: Bool
     @Binding var isResponseReceived: Bool
     @Binding var searchTextSubject: PassthroughSubject<String, Never>
     
@@ -41,7 +40,7 @@ struct SearchBarView: View {
             .foregroundColor(.gray)
             .padding(.leading, 13)
         }
-        .frame(height: isSearchBarExpand ? 40 : 0)
+        .frame(height: 40)
         .cornerRadius(13)
         .padding()
         .preferredColorScheme(.dark)
@@ -55,7 +54,6 @@ struct SearchBarView_Previews: PreviewProvider {
             SearchBarView(
                 searchText: .constant(""),
                 isSearching: .constant(false),
-                isSearchBarExpand: .constant(true),
                 isResponseReceived: .constant(true),
                 searchTextSubject: .constant(.init()))
         }

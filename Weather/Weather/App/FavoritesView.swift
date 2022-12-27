@@ -12,7 +12,6 @@ struct FavoritesView: View {
     
     @ObservedObject var viewModel: FavoritesViewModel
     
-    @State private var isSearchBarExpand = true
     @State private var offset: CGFloat = .zero
     
     @Binding var isFavoritesSheetShow: Bool
@@ -29,7 +28,6 @@ struct FavoritesView: View {
                     SearchBarView(
                         searchText: $viewModel.searchText,
                         isSearching: $viewModel.isSearching,
-                        isSearchBarExpand: $isSearchBarExpand,
                         isResponseReceived: $viewModel.isResponseReceived,
                         searchTextSubject: $viewModel.searchTextSubject)
                     
@@ -71,53 +69,38 @@ struct FavoritesView: View {
                             }
                         }
                     } else {
-                        
-                        List {
-                            ForEach(0..<$viewModel.favoriteCities.count) { i in
-                                let itemWrapped = $viewModel.favoriteCities[i].wrappedValue
-                                let title = itemWrapped.name ?? ""
-                                let subtitle = getTime(timeOffset: Int(itemWrapped.weather?.timeOffset ?? 0))
-                                let weatherDescription = itemWrapped.weather?.weatherDescription?.capitalizingFirstLetter() ?? ""
-                                let currentTemp = Int(itemWrapped.weather?.temp ?? 0.0)
-                                let minTemp = Int(itemWrapped.weather?.maxTemp ?? 0.0)
-                                let maxTemp = Int(itemWrapped.weather?.minTemp ?? 0.0)
-                                let isCurrentLocation = itemWrapped == viewModel.favoriteCities.first
-                                let icon = itemWrapped.weather?.icon ?? ""
-                                
-                                FavoriteCityCell(
-                                    title: title,
-                                    subtitle: subtitle,
-                                    weatherDescription: weatherDescription,
-                                    currentTemp: currentTemp,
-                                    minMaxTemp: "H:\(maxTemp)° L:\(minTemp)°",
-                                    isCurrentLocation: isCurrentLocation,
-                                    icon: icon)
-                                .onTapGesture {
-                                    isFavoritesSheetShow = false
-                                    selectedCity = i
-                                }
-                                .deleteDisabled(isCurrentLocation)
-                            }
-                            
-                            .onDelete(perform: delete)
-                            .listRowBackground(Color.clear)
-                            .background(
-                                GeometryReader {
-                                    Color.clear.preference(
-                                        key: ViewOffsetKey.self,
-                                        value: -$0.frame(in: .named("scroll")).origin.y)
-                                })
-                            .onPreferenceChange(ViewOffsetKey.self) {
-                                if $0 > 0 {
-                                    withAnimation(.linear(duration: 0.05)) {
-                                        isSearchBarExpand = false
-                                        UIApplication.shared.dismissKeyboard()
+                        ScrollViewReader { proxy in
+                            List {
+                                ForEach(0..<$viewModel.favoriteCities.count, id: \.self) { i in
+                                    let itemWrapped = $viewModel.favoriteCities[i].wrappedValue
+                                    let title = itemWrapped.name ?? ""
+                                    let subtitle = getTime(timeOffset: Int(itemWrapped.weather?.timeOffset ?? 0))
+                                    let weatherDescription = itemWrapped.weather?.weatherDescription?.capitalizingFirstLetter() ?? ""
+                                    let currentTemp = Int(itemWrapped.weather?.temp ?? 0.0)
+                                    let minTemp = Int(itemWrapped.weather?.maxTemp ?? 0.0)
+                                    let maxTemp = Int(itemWrapped.weather?.minTemp ?? 0.0)
+                                    let isCurrentLocation = itemWrapped == viewModel.favoriteCities.first
+                                    let icon = itemWrapped.weather?.icon ?? ""
+                                    
+                                    FavoriteCityCell(
+                                        title: title,
+                                        subtitle: subtitle,
+                                        weatherDescription: weatherDescription,
+                                        currentTemp: currentTemp,
+                                        minMaxTemp: "H:\(maxTemp)° L:\(minTemp)°",
+                                        isCurrentLocation: isCurrentLocation,
+                                        icon: icon)
+                                    .deleteDisabled(isCurrentLocation)
+                                    .onTapGesture {
+                                        isFavoritesSheetShow = false
+                                        selectedCity = i
                                     }
+                                    .tag(i)
                                 }
-                                if $0 < 0 {
-                                    withAnimation(.linear(duration: 0.05)) {
-                                        isSearchBarExpand = true
-                                    }
+                                .onDelete(perform: delete)
+                                .listRowBackground(Color.clear)
+                                .onChange(of: $viewModel.favoriteCities.count) { _ in
+                                    proxy.scrollTo($viewModel.favoriteCities.count - 1)
                                 }
                             }
                         }
@@ -151,16 +134,6 @@ struct FavoritesView: View {
         let index = offsets.first ?? 0
         viewModel.removeCitySubject.send(index)
     }
-}
-
-struct ViewOffsetKey: PreferenceKey {
-    typealias Value = CGFloat
-    static var defaultValue: CGFloat = .zero
-    static func reduce(
-        value: inout Value,
-        nextValue: () -> Value) {
-            value += nextValue()
-        }
 }
 
 struct FavoritesView_Previews: PreviewProvider {

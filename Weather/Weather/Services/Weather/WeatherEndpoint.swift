@@ -32,6 +32,7 @@ extension WeatherEndpoint: Endpoint {
     var queryItems: [URLQueryItem] {
         var queryItems: [URLQueryItem] = .init()
         let apiKey: String = "21ab5af043dced2b4111a3a29a5f7097"
+        
         switch self {
         case .current(let lat, let lon):
             let latItem: URLQueryItem = .init(name: "lat", value: "\(lat)")

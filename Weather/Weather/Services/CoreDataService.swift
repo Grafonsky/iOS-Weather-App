@@ -5,7 +5,6 @@
 //  Created by Bohdan Hawrylyshyn on 29.11.22.
 //
 
-import Foundation
 import CoreData
 import UIKit
 
@@ -56,6 +55,7 @@ extension CoreDataService {
             currentCity.lat = weatherData.weatherModel.lat
             currentCity.lon = weatherData.weatherModel.lon
             currentCity.weather = weatherDataToCoreData(weatherData: weatherData)
+            currentCity.lastUpdate = Date.currentTimeStamp
             saveWeather()
             return
         }
@@ -63,6 +63,7 @@ extension CoreDataService {
         currentCity?.name = weatherData.city
         currentCity?.weather = weatherDataToCoreData(weatherData: weatherData)
         currentCity?.alert = alertToCoreData(weatherData: weatherData)
+        currentCity?.lastUpdate = Date.currentTimeStamp
         saveWeather()
     }
     
@@ -90,6 +91,7 @@ extension CoreDataService {
     
     func updateCity(city: City, weatherData: WeatherData) {
         city.weather = weatherDataToCoreData(weatherData: weatherData)
+        city.lastUpdate = Date.currentTimeStamp
         saveWeather()
     }
 }

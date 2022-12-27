@@ -76,6 +76,8 @@ final class WeatherViewModel: ObservableObject {
                 .receive(on: DispatchQueue.main)
                 .sink(receiveValue: { [weak self] _ in
                     self?.loadFromCoreData(weatherType: weatherType)
+                    guard Date.isLastUpdateMoreThanHour()
+                    else { return }
                     self?.updateData()
                 })
                 .store(in: &bag)
@@ -84,6 +86,8 @@ final class WeatherViewModel: ObservableObject {
             else { break }
             self.updateUI(data: cityData)
             Task {
+                guard Date.isLastUpdateMoreThanHour()
+                else { return }
                 let weather = await weatherService.getTemp(cityData: cityData)
                 switch weather {
                 case .success(let weatherData):
