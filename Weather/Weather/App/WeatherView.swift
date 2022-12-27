@@ -25,6 +25,9 @@ struct WeatherView: View {
             
             ScrollView(showsIndicators: false) {
                 VStack(spacing: 0) {
+                    if $viewModel.networkStatus.wrappedValue != .satisfied {
+                        NoInternetView()
+                    }
                     Text(viewModel.cityName ?? "—")
                         .font(.customFont(weight: .medium, size: 34))
                         .shadow(color: Color.black.opacity(0.35), radius: 5)
@@ -78,7 +81,6 @@ struct WeatherView: View {
                 }
                 Spacer()
             }
-            LoaderView(isLoaded: $viewModel.isLoaded)
         }
         .preferredColorScheme(.dark)
     }
