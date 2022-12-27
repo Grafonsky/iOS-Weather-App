@@ -13,7 +13,7 @@ struct RootView: View {
     
     @State var isFavoritesSheetShow = false
     @State var selectedCity = 0
-
+    
     private var locationService: LocationService
     private var cityIterator = 0
     
@@ -35,8 +35,7 @@ struct RootView: View {
                 if $viewModel.isLoaded.wrappedValue {
                     ZStack {
                         TabView(selection: $selectedCity) {
-                            
-                            ForEach(0..<$viewModel.cities.count) { i in
+                            ForEach(0..<$viewModel.cities.count, id: \.self) { i in
                                 let city = $viewModel.cities[i].wrappedValue
                                 let weatherType: WeatherType = city == current ? .current : .favorite(data: city)
                                 WeatherView(viewModel: .init(
@@ -71,8 +70,7 @@ struct RootView: View {
                                 isFavoritesSheetShow = false
                             }) {
                                 FavoritesView(
-                                    viewModel: .init(
-                                        weatherService: viewModel.weatherService),
+                                    viewModel: .init(weatherService: viewModel.weatherService),
                                     isFavoritesSheetShow: $isFavoritesSheetShow,
                                     selectedCity: $selectedCity)
                             }
