@@ -7,6 +7,9 @@
 
 import SwiftUI
 import Combine
+import Network
+
+// MARK: - Enum WeatherType
 
 enum WeatherType {
     case current, favorite(data: City)
@@ -24,6 +27,8 @@ enum WeatherType {
         return lhs.cityData?.weather == rhs.cityData?.weather
     }
 }
+
+// MARK: - WeatherViewModel
 
 final class WeatherViewModel: ObservableObject {
     
@@ -52,6 +57,7 @@ final class WeatherViewModel: ObservableObject {
     @Published var sunset: String?
     @Published var minTemp: String?
     @Published var maxTemp: String?
+    @Published var networkStatus: NWPath.Status = .satisfied
     
     var minWeekTemp: CGFloat = 999
     var maxWeekTemp: CGFloat = -999
@@ -64,12 +70,34 @@ final class WeatherViewModel: ObservableObject {
     private let weatherService: WeatherService
     private let coreDataService: CoreDataService
     private let iconsModel: WeatherIconsModel
+    private let monitorQueue = DispatchQueue(label: "monitor")
     
     init(weatherType: WeatherType, locationService: LocationService) {
         self.iconsModel = .init()
         self.weatherService = .init(locationService: locationService)
         self.coreDataService = CoreDataService.shared
+        self.loadData(weatherType: weatherType)
         
+        NWPathMonitor()
+            .publisher(queue: monitorQueue)
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] status in
+                withAnimation {
+                    if self?.networkStatus != status {
+                        self?.networkStatus = status
+                        self?.loadData(weatherType: weatherType)
+                    }
+                }
+            }
+            .store(in: &bag)
+    }
+}
+
+// MARK: - Setup Data
+
+private extension WeatherViewModel {
+    
+    func loadData(weatherType: WeatherType) {
         switch weatherType {
         case .current:
             LocationService._currentCity
@@ -78,13 +106,32 @@ final class WeatherViewModel: ObservableObject {
                     self?.loadFromCoreData(weatherType: weatherType)
                     guard Date.isLastUpdateMoreThanHour()
                     else { return }
-                    self?.updateData()
+                    self?.updateData(weatherType: .current)
                 })
                 .store(in: &bag)
         case .favorite(_):
             guard let cityData = weatherType.cityData
             else { break }
             self.updateUI(data: cityData)
+            self.updateData(weatherType: .favorite(data: cityData))
+        }
+    }
+    
+    func updateData(weatherType: WeatherType) {
+        switch weatherType {
+        case .current:
+            Task {
+                let weather = await weatherService.getCurrentTemp()
+                switch weather {
+                case .success(_):
+                    loadFromCoreData(weatherType: .current)
+                case .failure(let error):
+                    AlertService.shared.presentAlert(
+                        title: "error".localizable,
+                        message: error.errorDescription ?? "")
+                }
+            }
+        case .favorite(let cityData):
             Task {
                 guard Date.isLastUpdateMoreThanHour()
                 else { return }
@@ -95,26 +142,11 @@ final class WeatherViewModel: ObservableObject {
                         city: cityData,
                         weatherData: weatherData)
                     self.updateUI(data: cityData)
-                case .failure(let failure):
-                    print("INSERT FAILURE ALERT")
-                    break
+                case .failure(let error):
+                    AlertService.shared.presentAlert(
+                        title: "error".localizable,
+                        message: error.errorDescription ?? "")
                 }
-            }
-        }
-    }
-}
-
-private extension WeatherViewModel {
-    
-    func updateData() {
-        Task {
-            let weather = await weatherService.getCurrentTemp()
-            switch weather {
-            case .success(_):
-                loadFromCoreData(weatherType: .current)
-            case .failure(let error):
-                print("INSERT FAILURE ALERT")
-                break
             }
         }
     }

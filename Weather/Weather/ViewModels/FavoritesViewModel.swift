@@ -65,8 +65,15 @@ private extension FavoritesViewModel {
                             self?.isResponseReceived = true
                             self?.searchableCities = success
                         }
-                    case .failure(let failure):
-                        break
+                    case .failure(let error):
+                        AlertService.shared.presentAlert(
+                            title: "error".localizable,
+                            message: error.errorDescription ?? "") {
+                                self.isSearching = false
+                                DispatchQueue.main.async {
+                                    UIApplication.shared.dismissKeyboard()
+                                }
+                            }
                     }
                 }
             }
@@ -93,5 +100,4 @@ private extension FavoritesViewModel {
             }
             .store(in: &bag)
     }
-    
 }

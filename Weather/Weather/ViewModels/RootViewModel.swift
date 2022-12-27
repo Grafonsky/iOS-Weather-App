@@ -57,10 +57,12 @@ final class RootViewModel: ObservableObject {
             
             let result = await weatherService.getCurrentTemp()
             switch result {
-            case .success(let success):
+            case .success(_):
                 isLoaded = true
-            case .failure(let failure):
-                break
+            case .failure(let error):
+                AlertService.shared.presentAlert(
+                    title: "error".localizable,
+                    message: error.errorDescription ?? "")
             }
             loadCities()
         }

@@ -36,6 +36,7 @@ final class WeatherService: HTTPClient {
         }
     }
     
+    @discardableResult
     func getTemp(cityData: CityData) async -> Result<WeatherData, HTTPRequestError> {
         let result = await sendRequest(
             endpoint: WeatherEndpoint.current(lat: cityData.lat, lon: cityData.lon),
