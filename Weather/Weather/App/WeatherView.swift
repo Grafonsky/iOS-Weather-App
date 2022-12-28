@@ -16,13 +16,28 @@ struct WeatherView: View {
         ZStack {
             let backgroundStyleCase = BackgroundStyleModel(rawValue: $viewModel.icon.wrappedValue ?? "")
             let cloudThickness: Cloud.Thickness = backgroundStyleCase?.cloudThickness ?? .none
+            let weatherDescription = $viewModel.weatherDescription.wrappedValue ?? ""
+            let isRainOn = backgroundStyleCase?.isRainOn ?? false
+            let isSnowOn = backgroundStyleCase?.isSnowOn ?? false
+            let isThunderstormOn = backgroundStyleCase?.isThunderstormOn ?? false
+            let rainCase = RainIntensity(rawValue: weatherDescription)
+            let snowCase = SnowIntensity(rawValue: weatherDescription)
+            let rainIntensity = rainCase?.intensity ?? 0
+            let snowIntensity = snowCase?.intensity ?? 0
+            let precipitationAngle = WindAngle.current(speed: $viewModel.windSpeed.wrappedValue ?? "").angle
             
             BackgroundView(
                 sceneState: .fullscreen,
+                cloudThickness: .constant(cloudThickness),
+                isRainOn: .constant(isRainOn),
+                isSnowOn: .constant(isSnowOn),
+                isThunderstormOn: .constant(isThunderstormOn),
+                snowIntensity: .constant(snowIntensity),
+                rainIntensity: .constant(rainIntensity),
                 time: .constant(DateFormatterService.shared.dateForBackground(
                     timezoneOffset: $viewModel.timeOffset.wrappedValue,
                     dateType: .sunMove)),
-                cloudThickness: .constant(cloudThickness))
+                precipitationAngle: .constant(precipitationAngle))
             
             ScrollView(showsIndicators: false) {
                 VStack(spacing: 0) {
@@ -73,7 +88,7 @@ struct WeatherView: View {
                         WeatherDetailsCellView(
                             detailsType: .wind,
                             addInfo: .constant(nil),
-                            weatherData: $viewModel.windSpeed)
+                            weatherData: .constant("\($viewModel.windSpeed.wrappedValue ?? "0.0") km/h"))
                         WeatherDetailsCellView(
                             detailsType: viewModel.isAMtime ? .sunrise : .sunset,
                             addInfo: viewModel.isAMtime ? $viewModel.sunset : $viewModel.sunrise,

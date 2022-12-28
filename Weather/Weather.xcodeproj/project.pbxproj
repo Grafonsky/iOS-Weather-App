@@ -80,7 +80,12 @@
 		FE43901D295C6393004ED2A7 /* Storm.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE43901C295C6393004ED2A7 /* Storm.swift */; };
 		FE43901F295C63B7004ED2A7 /* StormDrop.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE43901E295C63B7004ED2A7 /* StormDrop.swift */; };
 		FE439021295C63FB004ED2A7 /* StormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE439020295C63FB004ED2A7 /* StormView.swift */; };
-		FE439023295C654A004ED2A7 /* RainIntensity.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE439022295C654A004ED2A7 /* RainIntensity.swift */; };
+		FE439025295C6BF4004ED2A7 /* RainIntensity.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE439024295C6BF4004ED2A7 /* RainIntensity.swift */; };
+		FE439027295C6EB4004ED2A7 /* IsRainOn.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE439026295C6EB4004ED2A7 /* IsRainOn.swift */; };
+		FE439029295C715B004ED2A7 /* IsSnowOn.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE439028295C715B004ED2A7 /* IsSnowOn.swift */; };
+		FE43902B295C71FE004ED2A7 /* SnowIntensity.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE43902A295C71FE004ED2A7 /* SnowIntensity.swift */; };
+		FE43902D295C7572004ED2A7 /* WindAngle.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE43902C295C7572004ED2A7 /* WindAngle.swift */; };
+		FE43902F295C8647004ED2A7 /* IsThunderstorm On.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE43902E295C8647004ED2A7 /* IsThunderstorm On.swift */; };
 		FEC7981D29361521009C3451 /* CoreDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEC7981C29361521009C3451 /* CoreDataService.swift */; };
 		FEC7982029361590009C3451 /* WeatherEntity.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = FEC7981E29361590009C3451 /* WeatherEntity.xcdatamodeld */; };
 		FEF0D438295128C500AB5617 /* FavoritesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEF0D437295128C500AB5617 /* FavoritesView.swift */; };
@@ -172,7 +177,12 @@
 		FE43901C295C6393004ED2A7 /* Storm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Storm.swift; sourceTree = "<group>"; };
 		FE43901E295C63B7004ED2A7 /* StormDrop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StormDrop.swift; sourceTree = "<group>"; };
 		FE439020295C63FB004ED2A7 /* StormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StormView.swift; sourceTree = "<group>"; };
-		FE439022295C654A004ED2A7 /* RainIntensity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RainIntensity.swift; sourceTree = "<group>"; };
+		FE439024295C6BF4004ED2A7 /* RainIntensity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RainIntensity.swift; sourceTree = "<group>"; };
+		FE439026295C6EB4004ED2A7 /* IsRainOn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IsRainOn.swift; sourceTree = "<group>"; };
+		FE439028295C715B004ED2A7 /* IsSnowOn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IsSnowOn.swift; sourceTree = "<group>"; };
+		FE43902A295C71FE004ED2A7 /* SnowIntensity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnowIntensity.swift; sourceTree = "<group>"; };
+		FE43902C295C7572004ED2A7 /* WindAngle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindAngle.swift; sourceTree = "<group>"; };
+		FE43902E295C8647004ED2A7 /* IsThunderstorm On.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "IsThunderstorm On.swift"; sourceTree = "<group>"; };
 		FEC7981C29361521009C3451 /* CoreDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataService.swift; sourceTree = "<group>"; };
 		FEC7981F29361590009C3451 /* WeatherEntity.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = WeatherEntity.xcdatamodel; sourceTree = "<group>"; };
 		FEF0D437295128C500AB5617 /* FavoritesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesView.swift; sourceTree = "<group>"; };
@@ -420,7 +430,12 @@
 			children = (
 				FE43900F295C54F1004ED2A7 /* BackgroundStyleModel.swift */,
 				FE439012295C57AE004ED2A7 /* CloudThickness.swift */,
-				FE439022295C654A004ED2A7 /* RainIntensity.swift */,
+				FE43902C295C7572004ED2A7 /* WindAngle.swift */,
+				FE439026295C6EB4004ED2A7 /* IsRainOn.swift */,
+				FE439028295C715B004ED2A7 /* IsSnowOn.swift */,
+				FE439024295C6BF4004ED2A7 /* RainIntensity.swift */,
+				FE43902A295C71FE004ED2A7 /* SnowIntensity.swift */,
+				FE43902E295C8647004ED2A7 /* IsThunderstorm On.swift */,
 			);
 			path = BackgroundStyleModel;
 			sourceTree = "<group>";
@@ -596,6 +611,7 @@
 				90C04665290D5F4700F5C9B1 /* HTTPClient.swift in Sources */,
 				9067BC632921A85A00B3B4D3 /* SKTexture + ext.swift in Sources */,
 				90C04676290E713A00F5C9B1 /* DateFormatterService.swift in Sources */,
+				FE43902B295C71FE004ED2A7 /* SnowIntensity.swift in Sources */,
 				90C0465A290D3DA300F5C9B1 /* LocationService.swift in Sources */,
 				90C04668290D65D200F5C9B1 /* WeatherModel.swift in Sources */,
 				FE439000295C4B8D004ED2A7 /* Star.swift in Sources */,
@@ -617,6 +633,7 @@
 				9067BC3B29216A7500B3B4D3 /* WeatherGradientModel.swift in Sources */,
 				9067BC3D2921713200B3B4D3 /* SpriteKitNodesModel.swift in Sources */,
 				FE43901F295C63B7004ED2A7 /* StormDrop.swift in Sources */,
+				FE43902D295C7572004ED2A7 /* WindAngle.swift in Sources */,
 				FE438FEF295B1123004ED2A7 /* Date + ext.swift in Sources */,
 				90C0467B290ECBAC00F5C9B1 /* Font + ext.swift in Sources */,
 				90C04685290EF01F00F5C9B1 /* HourlyCellView.swift in Sources */,
@@ -627,9 +644,10 @@
 				90E18C92290C529D00A41760 /* WeatherApp.swift in Sources */,
 				FE439017295C61EB004ED2A7 /* LightningView.swift in Sources */,
 				FE438FF3295B2E3C004ED2A7 /* NWPathMonitor + ext.swift in Sources */,
-				FE439023295C654A004ED2A7 /* RainIntensity.swift in Sources */,
 				90C04661290D5D3500F5C9B1 /* Endpoint.swift in Sources */,
 				90C0466D290D714600F5C9B1 /* WeatherServiceError.swift in Sources */,
+				FE43902F295C8647004ED2A7 /* IsThunderstorm On.swift in Sources */,
+				FE439029295C715B004ED2A7 /* IsSnowOn.swift in Sources */,
 				9067BC372921509800B3B4D3 /* WeatherDetailsCellView.swift in Sources */,
 				90C04671290D75BD00F5C9B1 /* WeatherEndpoint.swift in Sources */,
 				FE439010295C54F1004ED2A7 /* BackgroundStyleModel.swift in Sources */,
@@ -638,6 +656,8 @@
 				FE439002295C4BC8004ED2A7 /* MeteorShower.swift in Sources */,
 				FE439004295C4BD7004ED2A7 /* Meteor.swift in Sources */,
 				9067BC5D29218D0300B3B4D3 /* SpriteKitScene.swift in Sources */,
+				FE439025295C6BF4004ED2A7 /* RainIntensity.swift in Sources */,
+				FE439027295C6EB4004ED2A7 /* IsRainOn.swift in Sources */,
 				FE439013295C57AE004ED2A7 /* CloudThickness.swift in Sources */,
 				FEF0D43C29512B1B00AB5617 /* FavoriteCityCell.swift in Sources */,
 				FE438FF7295B41EA004ED2A7 /* AlertService.swift in Sources */,

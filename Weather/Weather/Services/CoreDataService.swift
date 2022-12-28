@@ -90,9 +90,11 @@ extension CoreDataService {
     }
     
     func updateCity(city: City, weatherData: WeatherData) {
-        city.weather = weatherDataToCoreData(weatherData: weatherData)
-        city.lastUpdate = Date.currentTimeStamp
-        saveWeather()
+        DispatchQueue.main.async { [weak self] in
+            city.weather = self?.weatherDataToCoreData(weatherData: weatherData)
+            city.lastUpdate = Date.currentTimeStamp
+            self?.saveWeather()
+        }
     }
 }
 
