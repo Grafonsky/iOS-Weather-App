@@ -63,9 +63,25 @@ struct WeatherView: View {
                 .transition(.opacity)
                 
                 VStack(spacing: 10) {
-                    HourlyForecastView(
-                        hourly: $viewModel.hourlyForecast,
-                        alert: $viewModel.alert)
+                    if isSnowOn {
+                        HourlyForecastView(
+                            hourly: $viewModel.hourlyForecast,
+                            alert: $viewModel.alert,
+                            precipitationType: .constant(.snow),
+                            residueStrength: .constant(Double(snowIntensity)))
+                    } else if isRainOn {
+                        HourlyForecastView(
+                            hourly: $viewModel.hourlyForecast,
+                            alert: $viewModel.alert,
+                            precipitationType: .constant(.rain),
+                            residueStrength: .constant(Double(rainIntensity)))
+                    } else {
+                        HourlyForecastView(
+                            hourly: $viewModel.hourlyForecast,
+                            alert: $viewModel.alert,
+                            precipitationType: .constant(.none),
+                            residueStrength: .constant(0))
+                    }
                     DailyForecastView(
                         daily: $viewModel.dailyForecast,
                         minWeekTemp: $viewModel.minWeekTemp,

@@ -24,11 +24,11 @@ extension RainIntensity {
     var intensity: Int {
         switch self {
         case .light:
-            return 15
+            return 25
         case .moderate:
-            return 150
+            return 175
         case .heavy:
-            return 500
+            return 550
         case .veryHeavy:
             return 1000
         case .extreme:

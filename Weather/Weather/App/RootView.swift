@@ -31,58 +31,58 @@ struct RootView: View {
             SignatureView()
                 .frame(height: UIScreen.screenHeight * 0.6)
             
-            if $viewModel.isLocationAllowed.wrappedValue {
-                if $viewModel.isLoaded.wrappedValue {
-                    ZStack {
-                        TabView(selection: $selectedCity) {
-                            ForEach(0..<$viewModel.cities.count, id: \.self) { i in
-                                let city = $viewModel.cities[i].wrappedValue
-                                let weatherType: WeatherType = city == current ? .current : .favorite(data: city)
-                                WeatherView(viewModel: .init(
-                                    weatherType: weatherType,
-                                    locationService: locationService))
-                                .tag(i)
-                            }
+            if $viewModel.isLoaded.wrappedValue {
+                ZStack {
+                    TabView(selection: $selectedCity) {
+                        ForEach(0..<$viewModel.cities.count, id: \.self) { i in
+                            let city = $viewModel.cities[i].wrappedValue
+                            let weatherType: WeatherType = city == current ? .current : .favorite(data: city)
+                            WeatherView(viewModel: .init(
+                                weatherType: weatherType,
+                                locationService: locationService))
+                            .tag(i)
                         }
-                        .tabViewStyle(PageTabViewStyle())
-                        .ignoresSafeArea()
-                        
-                        VStack {
-                            HStack {
-                                Spacer()
-                                Button {
-                                    isFavoritesSheetShow = true
-                                } label: {
-                                    Image(systemName: "list.bullet")
-                                        .resizable()
-                                        .aspectRatio(contentMode: .fit)
-                                        .frame(width: 25)
-                                        .foregroundColor(.white)
-                                }
-                            }
+                    }
+                    .tabViewStyle(PageTabViewStyle())
+                    .ignoresSafeArea()
+                    
+                    VStack {
+                        HStack {
                             Spacer()
-                        }
-                        .padding()
-                        .sheet(
-                            isPresented: $isFavoritesSheetShow,
-                            onDismiss: {
-                                viewModel.loadCities()
-                                isFavoritesSheetShow = false
-                            }) {
-                                FavoritesView(
-                                    viewModel: .init(weatherService: viewModel.weatherService),
-                                    isFavoritesSheetShow: $isFavoritesSheetShow,
-                                    selectedCity: $selectedCity)
+                            Button {
+                                isFavoritesSheetShow = true
+                            } label: {
+                                Image(systemName: "list.bullet")
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                    .frame(width: 25)
+                                    .foregroundColor(.white)
                             }
+                        }
+                        Spacer()
                     }
-                } else {
-                    ZStack {
-                        Color.init(hex: "1d1d1d")
-                            .ignoresSafeArea()
-                        LoaderView(isLoaded: $viewModel.isLoaded)
-                    }
+                    .padding()
+                    .sheet(
+                        isPresented: $isFavoritesSheetShow,
+                        onDismiss: {
+                            viewModel.loadCities()
+                            isFavoritesSheetShow = false
+                        }) {
+                            FavoritesView(
+                                viewModel: .init(weatherService: viewModel.weatherService),
+                                isFavoritesSheetShow: $isFavoritesSheetShow,
+                                selectedCity: $selectedCity)
+                        }
                 }
             } else {
+                ZStack {
+                    Color.init(hex: "1d1d1d")
+                        .ignoresSafeArea()
+                    LoaderView(isLoaded: $viewModel.isLoaded)
+                }
+            }
+            
+            if !$viewModel.isLocationAllowed.wrappedValue {
                 if viewModel.isFirstLaunch {
                     CheckLocationView(appLaunchState: .first)
                 } else {
