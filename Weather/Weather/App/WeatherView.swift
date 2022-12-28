@@ -14,14 +14,15 @@ struct WeatherView: View {
     var body: some View {
         
         ZStack {
+            let backgroundStyleCase = BackgroundStyleModel(rawValue: $viewModel.icon.wrappedValue ?? "")
+            let cloudThickness: Cloud.Thickness = backgroundStyleCase?.cloudThickness ?? .none
             
-            // FIXIT: - Temporarily hid background until i optimise this view
-            
-            //            BackgroundView(
-            //                topBackgroundGradient: $viewModel.topBackgroundColor,
-            //                bottomBackgroundGradient: $viewModel.bottomBackgroundColor,
-            //                spriteKitNodes: $viewModel.spriteKitNodes,
-            //                sceneState: .fullscreen)
+            BackgroundView(
+                sceneState: .fullscreen,
+                time: .constant(DateFormatterService.shared.dateForBackground(
+                    timezoneOffset: $viewModel.timeOffset.wrappedValue,
+                    dateType: .sunMove)),
+                cloudThickness: .constant(cloudThickness))
             
             ScrollView(showsIndicators: false) {
                 VStack(spacing: 0) {
