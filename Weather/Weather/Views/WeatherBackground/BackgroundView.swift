@@ -12,14 +12,18 @@ struct BackgroundView: View {
     
     @State var sceneState: SceneState
     
-    @Binding var time: Double
     @Binding var cloudThickness: Cloud.Thickness
+    @Binding var isRainOn: Bool
+    @Binding var isSnowOn: Bool
+    @Binding var isThunderstormOn: Bool
+    @Binding var snowIntensity: Int
+    @Binding var rainIntensity: Int
+    @Binding var time: Double
+    @Binding var precipitationAngle: Double
     
     @State private var lightningMaxBolts = 4.0
     @State private var lightningForkProbability = 20.0
-    @State private var stormType = Storm.Contents.none
-    @State private var rainIntensity = 500.0
-    @State private var rainAngle = 0.0
+    @State private var stormType = Storm.Contents.rain
     
     let backgroundTopStops: [Gradient.Stop] = [
         .init(color: .midnightStart, location: 0),
@@ -95,18 +99,27 @@ struct BackgroundView: View {
             
             SunView(progress: $time.wrappedValue)
             
-            LightningView(
-                maximumBolts: Int(lightningMaxBolts),
-                forkProbability: Int(lightningForkProbability))
-            .zIndex(1)
-            
-            if stormType != .none {
-                StormView(type: stormType, direction: .degrees(rainAngle), strength: Int(rainIntensity))
+            if $isRainOn.wrappedValue {
+                StormView(
+                    type: .rain,
+                    direction: .degrees($precipitationAngle.wrappedValue),
+                    strength: rainIntensity)
             }
-            
+            if $isSnowOn.wrappedValue {
+                StormView(
+                    type: .snow,
+                    direction: .degrees($precipitationAngle.wrappedValue),
+                    strength: snowIntensity)
+            }
+            if $isThunderstormOn.wrappedValue {
+                LightningView(
+                    maximumBolts: Int(lightningMaxBolts),
+                    forkProbability: Int(lightningForkProbability))
+                .zIndex(1)
+            }
         }
         .ignoresSafeArea()
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .frame(maxWidth: UIScreen.screenWidth, maxHeight: UIScreen.screenHeight)
         .background(
             LinearGradient(colors: [
                 backgroundTopStops.interpolated(amount: time),
@@ -120,7 +133,13 @@ struct BackgroundView_Previews: PreviewProvider {
     static var previews: some View {
         BackgroundView(
             sceneState: .fullscreen,
-            time: .constant(0.5),
-            cloudThickness: .constant(.regular))
+            cloudThickness: .constant(.thick),
+            isRainOn: .constant(false),
+            isSnowOn: .constant(false),
+            isThunderstormOn: .constant(false),
+            snowIntensity: .constant(5),
+            rainIntensity: .constant(5),
+            time: .constant(0.9),
+            precipitationAngle: .constant(0.9))
     }
 }
