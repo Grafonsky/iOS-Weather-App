@@ -178,8 +178,6 @@ private extension CoreDataService {
                 alertStartDate,
                 alertEndDate)
         }
-        weather.bottomBackgroundColor = WeatherGradientModel().colors[icon ?? ""]?[1] ?? ""
-        weather.topBackgroundColor = WeatherGradientModel().colors[icon ?? ""]?[0] ?? ""
         weather.feelsLike = weatherData.weatherModel.current.feelsLike
         weather.humidity = weatherData.weatherModel.current.humidity
         weather.icon = weatherData.weatherModel.current.weather.first?.icon

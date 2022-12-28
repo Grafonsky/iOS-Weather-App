@@ -27,7 +27,6 @@ struct WeatherView: View {
             let precipitationAngle = WindAngle.current(speed: $viewModel.windSpeed.wrappedValue ?? "").angle
             
             BackgroundView(
-                sceneState: .fullscreen,
                 cloudThickness: .constant(cloudThickness),
                 isRainOn: .constant(isRainOn),
                 isSnowOn: .constant(isSnowOn),

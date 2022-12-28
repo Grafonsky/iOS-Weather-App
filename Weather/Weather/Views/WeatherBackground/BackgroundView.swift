@@ -6,11 +6,8 @@
 //
 
 import SwiftUI
-import SpriteKit
 
 struct BackgroundView: View {
-    
-    @State var sceneState: SceneState
     
     @Binding var cloudThickness: Cloud.Thickness
     @Binding var isRainOn: Bool
@@ -132,7 +129,6 @@ struct BackgroundView: View {
 struct BackgroundView_Previews: PreviewProvider {
     static var previews: some View {
         BackgroundView(
-            sceneState: .fullscreen,
             cloudThickness: .constant(.thick),
             isRainOn: .constant(false),
             isSnowOn: .constant(false),
