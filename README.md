@@ -16,6 +16,8 @@
 - MVVM
 - Swift 5.7
 - Combine
+- CoreData
+- CoreLocation
 - [SwiftLint](https://github.com/realm/SwiftLint)
 
 ## Screenshots
