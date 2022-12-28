@@ -81,6 +81,8 @@ struct FavoritesView: View {
                                     let maxTemp = Int(itemWrapped.weather?.minTemp ?? 0.0)
                                     let isCurrentLocation = itemWrapped == viewModel.favoriteCities.first
                                     let icon = itemWrapped.weather?.icon ?? ""
+                                    let windSpeed = "\(itemWrapped.weather?.windSpeed ?? 0.0)"
+                                    let timezoneOffset = Int(itemWrapped.weather?.timeOffset ?? 0)
                                     
                                     FavoriteCityCell(
                                         title: title,
@@ -89,7 +91,9 @@ struct FavoritesView: View {
                                         currentTemp: currentTemp,
                                         minMaxTemp: "H:\(maxTemp)° L:\(minTemp)°",
                                         isCurrentLocation: isCurrentLocation,
-                                        icon: icon)
+                                        icon: icon,
+                                        windSpeed: windSpeed,
+                                        timezoneOffset: timezoneOffset)
                                     .deleteDisabled(isCurrentLocation)
                                     .onTapGesture {
                                         isFavoritesSheetShow = false

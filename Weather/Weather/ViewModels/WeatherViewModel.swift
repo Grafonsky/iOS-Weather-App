@@ -62,18 +62,15 @@ final class WeatherViewModel: ObservableObject {
     var minWeekTemp: CGFloat = 999
     var maxWeekTemp: CGFloat = -999
     var currentTemp: CGFloat = 999
-    var spriteKitNodes: [SpriteKitNode] = []
     var isFeelsLikeCoolerTemp: Bool = false
     var isAMtime: Bool = false
     var timeOffset: Int = 0
     
     private let weatherService: WeatherService
     private let coreDataService: CoreDataService
-    private let iconsModel: WeatherIconsModel
     private let monitorQueue = DispatchQueue(label: "monitor")
     
     init(weatherType: WeatherType, locationService: LocationService) {
-        self.iconsModel = .init()
         self.weatherService = .init(locationService: locationService)
         self.coreDataService = CoreDataService.shared
         self.loadData(weatherType: weatherType)
@@ -171,7 +168,6 @@ private extension WeatherViewModel {
     func updateUI(data: City) {
         DispatchQueue.main.async { [weak self] in
             self?.timeOffset = Int(data.weather?.timeOffset ?? 0)
-            self?.setupBackground(data: data)
             self?.setupData(data: data)
             self?.setupHourlyForecast(data: data)
             self?.setupDailyForecast(data: data)
@@ -179,13 +175,6 @@ private extension WeatherViewModel {
             self?.setupAdditionalWeatherInfo(data: data)
             self?.isLoaded = true
         }
-    }
-    
-    func setupBackground(data: City) {
-        let icon = data.weather?.icon
-        self.topBackgroundColor = WeatherGradientModel().colors[icon ?? ""]?[0] ?? ""
-        self.bottomBackgroundColor = WeatherGradientModel().colors[icon ?? ""]?[1] ?? ""
-        self.spriteKitNodes = SpriteKitNodes().nodes[icon ?? ""] ?? []
     }
     
     func setupData(data: City) {
@@ -217,7 +206,7 @@ private extension WeatherViewModel {
         var hourlyWeather = data.weather?.hourly?.allObjects as? [Hourly]
         hourlyWeather?.sort { $0.date < $1.date }
         hourlyWeather?.enumerated().forEach { hourly in
-            let icon = self.iconsModel.iconsDict[hourly.element.icon ?? ""] ?? ""
+            let icon = BackgroundStyleModel(rawValue: hourly.element.icon ?? "")?.icon ?? ""
             let date = DateFormatterService.shared.dateToString(
                 time: Int(hourly.element.date),
                 timezoneOffset: timeOffset,
@@ -241,7 +230,7 @@ private extension WeatherViewModel {
         var dailyWeather = data.weather?.daily?.allObjects as? [Daily]
         dailyWeather?.sort { $0.date < $1.date }
         dailyWeather?.enumerated().forEach { daily in
-            let icon = self.iconsModel.iconsDict[daily.element.icon ?? ""] ?? ""
+            let icon = BackgroundStyleModel(rawValue: daily.element.icon ?? "")?.icon ?? ""
             let date = DateFormatterService.shared.dateToString(
                 time: Int(daily.element.date),
                 timezoneOffset: timeOffset,

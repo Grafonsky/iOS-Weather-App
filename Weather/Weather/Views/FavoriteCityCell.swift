@@ -16,22 +16,34 @@ struct FavoriteCityCell: View {
     @State var minMaxTemp: String
     @State var isCurrentLocation: Bool
     @State var icon: String
+    @State var windSpeed: String
+    @State var timezoneOffset: Int
     
     var body: some View {
         
         ZStack {
+            let backgroundStyleCase = BackgroundStyleModel(rawValue: icon)
+            let cloudThickness: Cloud.Thickness = backgroundStyleCase?.cloudThickness ?? .none
+            let isRainOn = backgroundStyleCase?.isRainOn ?? false
+            let isSnowOn = backgroundStyleCase?.isSnowOn ?? false
+            let isThunderstormOn = backgroundStyleCase?.isThunderstormOn ?? false
+            let rainCase = RainIntensity(rawValue: weatherDescription)
+            let snowCase = SnowIntensity(rawValue: weatherDescription)
+            let rainIntensity = rainCase?.intensity ?? 0
+            let snowIntensity = snowCase?.intensity ?? 0
+            let precipitationAngle = WindAngle.current(speed: windSpeed).angle
             
-            // FIXIT: - Temporarily hid background until i optimise this view
-            
-            //            let topBackgroundGradient = WeatherGradientModel().colors[icon]?[0] ?? ""
-            //            let bottomBackgroundGradient = WeatherGradientModel().colors[icon]?[1] ?? ""
-            //            let spriteKitNodes = SpriteKitNodes().nodes[icon] ?? []
-            //
-            //            BackgroundView(
-            //                topBackgroundGradient: .constant(topBackgroundGradient),
-            //                bottomBackgroundGradient: .constant(bottomBackgroundGradient),
-            //                spriteKitNodes: .constant(spriteKitNodes),
-            //                sceneState: .preview)
+            BackgroundView(
+                cloudThickness: .constant(cloudThickness),
+                isRainOn: .constant(isRainOn),
+                isSnowOn: .constant(isSnowOn),
+                isThunderstormOn: .constant(isThunderstormOn),
+                snowIntensity: .constant(snowIntensity),
+                rainIntensity: .constant(rainIntensity),
+                time: .constant(DateFormatterService.shared.dateForBackground(
+                    timezoneOffset: timezoneOffset,
+                    dateType: .sunMove)),
+                precipitationAngle: .constant(precipitationAngle))
             
             HStack {
                 VStack(alignment: .leading) {
@@ -82,7 +94,9 @@ struct FavoriteCityCell_Previews: PreviewProvider {
                 currentTemp: 5,
                 minMaxTemp: "H:7° L:3°",
                 isCurrentLocation: true,
-                icon: "01n")
+                icon: "01n",
+                windSpeed: "1.25",
+                timezoneOffset: 7200)
         }
     }
 }
