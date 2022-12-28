@@ -43,18 +43,19 @@ final class RootViewModel: ObservableObject {
         locationService = .init()
         accessLocationService = .init(locationService: locationService)
         weatherService = .init(locationService: locationService)
-        loadCities()
         
         Task {
             isLocationAllowed = await accessLocationService.checkAuthorizationStatus()
-            
             guard isLocationAllowed,
                   cities.isEmpty
             else {
                 isLoaded = true
                 return
             }
-            
+        }
+        loadCities()
+        
+        Task {
             let result = await weatherService.getCurrentTemp()
             switch result {
             case .success(_):

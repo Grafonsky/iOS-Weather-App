@@ -13,55 +13,47 @@ struct HourlyForecastView: View {
     
     @Binding var hourly: [HourlyForecast]
     @Binding var alert: String?
+    @Binding var precipitationType: Storm.Contents
+    @Binding var residueStrength: Double
     
     var body: some View {
         
-        ZStack {
-            Rectangle()
-                .foregroundColor(.clear)
-                .background(.ultraThinMaterial)
-                .cornerRadius(20)
-            VStack {
-                if alert != nil {
-                    HStack {
-                        Text(alert ?? "—")
-                            .font(.customFont(weight: .regular, size: 14))
-                            .foregroundColor(.white)
-                        Spacer()
+        VStack(spacing: 0) {
+            ResidueView(type: precipitationType, strength: residueStrength)
+                .offset(y: 5)
+                .zIndex(1)
+            
+            ZStack {
+                Rectangle()
+                    .foregroundColor(.clear)
+                    .background(.ultraThinMaterial)
+                    .cornerRadius(20)
+                VStack {
+                    if alert != nil {
+                        HStack {
+                            Text(alert ?? "—")
+                                .font(.customFont(weight: .regular, size: 14))
+                                .foregroundColor(.white)
+                            Spacer()
+                        }
+                        Divider()
                     }
-                    Divider()
-                }
-                HStack(alignment: .center) {
-                    ScrollView(.horizontal, showsIndicators: false) {
-                        HStack(spacing: 15) {
-                            ForEach($hourly, id: \.date) { item in
-                                HourlyCellView(
-                                    hour: item.date,
-                                    icon: item.icon,
-                                    temp: item.temp)
+                    HStack(alignment: .center) {
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack(spacing: 15) {
+                                ForEach($hourly, id: \.date) { item in
+                                    HourlyCellView(
+                                        hour: item.date,
+                                        icon: item.icon,
+                                        temp: item.temp)
+                                }
                             }
                         }
                     }
                 }
+                .padding()
             }
-            .padding()
+            .frame(width: UIScreen.screenWidth * 0.9)
         }
-        .frame(width: UIScreen.screenWidth * 0.9)
-    }
-}
-
-struct HourlyForecastView_Previews: PreviewProvider {
-    static var previews: some View {
-        HourlyForecastView(
-            hourly: .constant([
-                (icon: "sun.max.fill", date: "Now", temp: "1°"),
-                (icon: "sun.max.fill", date: "22", temp: "1°"),
-                (icon: "sun.max.fill", date: "23", temp: "1°"),
-                (icon: "sun.max.fill", date: "00", temp: "1°"),
-                (icon: "sun.max.fill", date: "01", temp: "1°"),
-                (icon: "sun.max.fill", date: "02", temp: "1°"),
-                (icon: "sun.max.fill", date: "03", temp: "1°"),
-            ]),
-            alert: .constant("Ветер местами порывы 15-20 from 21:00 to 10:00"))
     }
 }

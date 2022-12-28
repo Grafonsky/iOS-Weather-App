@@ -74,6 +74,9 @@
 		FE43902D295C7572004ED2A7 /* WindAngle.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE43902C295C7572004ED2A7 /* WindAngle.swift */; };
 		FE43902F295C8647004ED2A7 /* IsThunderstorm On.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE43902E295C8647004ED2A7 /* IsThunderstorm On.swift */; };
 		FE439031295C911A004ED2A7 /* WeatherIconModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE439030295C911A004ED2A7 /* WeatherIconModel.swift */; };
+		FE439037295C974D004ED2A7 /* ResidueDrop.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE439036295C974D004ED2A7 /* ResidueDrop.swift */; };
+		FE439039295C976D004ED2A7 /* Residue.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE439038295C976D004ED2A7 /* Residue.swift */; };
+		FE43903B295C97B4004ED2A7 /* ResidueView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE43903A295C97B4004ED2A7 /* ResidueView.swift */; };
 		FEC7981D29361521009C3451 /* CoreDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEC7981C29361521009C3451 /* CoreDataService.swift */; };
 		FEC7982029361590009C3451 /* WeatherEntity.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = FEC7981E29361590009C3451 /* WeatherEntity.xcdatamodeld */; };
 		FEF0D438295128C500AB5617 /* FavoritesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEF0D437295128C500AB5617 /* FavoritesView.swift */; };
@@ -159,6 +162,9 @@
 		FE43902C295C7572004ED2A7 /* WindAngle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindAngle.swift; sourceTree = "<group>"; };
 		FE43902E295C8647004ED2A7 /* IsThunderstorm On.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "IsThunderstorm On.swift"; sourceTree = "<group>"; };
 		FE439030295C911A004ED2A7 /* WeatherIconModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherIconModel.swift; sourceTree = "<group>"; };
+		FE439036295C974D004ED2A7 /* ResidueDrop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResidueDrop.swift; sourceTree = "<group>"; };
+		FE439038295C976D004ED2A7 /* Residue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Residue.swift; sourceTree = "<group>"; };
+		FE43903A295C97B4004ED2A7 /* ResidueView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResidueView.swift; sourceTree = "<group>"; };
 		FEC7981C29361521009C3451 /* CoreDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataService.swift; sourceTree = "<group>"; };
 		FEC7981F29361590009C3451 /* WeatherEntity.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = WeatherEntity.xcdatamodel; sourceTree = "<group>"; };
 		FEF0D437295128C500AB5617 /* FavoritesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesView.swift; sourceTree = "<group>"; };
@@ -377,6 +383,9 @@
 				FE43901E295C63B7004ED2A7 /* StormDrop.swift */,
 				FE43901C295C6393004ED2A7 /* Storm.swift */,
 				FE439020295C63FB004ED2A7 /* StormView.swift */,
+				FE439036295C974D004ED2A7 /* ResidueDrop.swift */,
+				FE439038295C976D004ED2A7 /* Residue.swift */,
+				FE43903A295C97B4004ED2A7 /* ResidueView.swift */,
 			);
 			path = WeatherBackground;
 			sourceTree = "<group>";
@@ -541,6 +550,7 @@
 				9067BC5029217E0C00B3B4D3 /* BackgroundView.swift in Sources */,
 				90C0466A290D70F400F5C9B1 /* WeatherService.swift in Sources */,
 				FE439031295C911A004ED2A7 /* WeatherIconModel.swift in Sources */,
+				FE43903B295C97B4004ED2A7 /* ResidueView.swift in Sources */,
 				90E18CA1290C553200A41760 /* WeatherView.swift in Sources */,
 				FE43901B295C6230004ED2A7 /* LightningBolt.swift in Sources */,
 				90C04663290D5DA700F5C9B1 /* HTTPRequestError.swift in Sources */,
@@ -553,6 +563,7 @@
 				FE438FF9295B4380004ED2A7 /* UIWindow + ext.swift in Sources */,
 				FEF0D44B295180AE00AB5617 /* CityData.swift in Sources */,
 				FEC7982029361590009C3451 /* WeatherEntity.xcdatamodeld in Sources */,
+				FE439037295C974D004ED2A7 /* ResidueDrop.swift in Sources */,
 				FE438FC72956FC9D004ED2A7 /* RootView.swift in Sources */,
 				FE43900C295C4F2E004ED2A7 /* CloudGroup.swift in Sources */,
 				FE438FCF295A0D57004ED2A7 /* SignatureView.swift in Sources */,
@@ -583,6 +594,7 @@
 				FE438FEF295B1123004ED2A7 /* Date + ext.swift in Sources */,
 				90C0467B290ECBAC00F5C9B1 /* Font + ext.swift in Sources */,
 				90C04685290EF01F00F5C9B1 /* HourlyCellView.swift in Sources */,
+				FE439039295C976D004ED2A7 /* Residue.swift in Sources */,
 				FEF0D4492951797800AB5617 /* CityModel.swift in Sources */,
 				FE438FF5295B3C19004ED2A7 /* NoInternetView.swift in Sources */,
 				FE439019295C6212004ED2A7 /* Lightning.swift in Sources */,
