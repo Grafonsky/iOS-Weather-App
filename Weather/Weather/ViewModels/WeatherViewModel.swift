@@ -40,9 +40,9 @@ final class WeatherViewModel: ObservableObject {
     
     @Published private(set) var cityName: String?
     @Published private(set) var temp: String?
-    @Published private(set) var weatherDescription: String?
-    @Published private(set) var icon: String?
     
+    @Published var weatherDescription: String?
+    @Published var icon: String?
     @Published var weatherType: WeatherType = .current
     @Published var isLoaded: Bool = false
     @Published var dailyForecast: [DailyForecast] = []
@@ -102,11 +102,15 @@ private extension WeatherViewModel {
         case .current:
             LocationService._currentCity
                 .receive(on: DispatchQueue.main)
-                .sink(receiveValue: { [weak self] _ in
+                .sink(receiveValue: { [weak self] newValue in
                     self?.loadFromCoreData(weatherType: weatherType)
-                    guard Date.isLastUpdateMoreThanHour()
-                    else { return }
-                    self?.updateData(weatherType: .current)
+                    if newValue != self?.cityName ?? "" {
+                        self?.updateData(weatherType: .current)
+                    } else {
+                        guard Date.isLastUpdateMoreThanHour()
+                        else { return }
+                        self?.updateData(weatherType: .current)
+                    }
                 })
                 .store(in: &bag)
         case .favorite(_):
@@ -133,7 +137,7 @@ private extension WeatherViewModel {
             }
         case .favorite(let cityData):
             Task {
-                guard Date.isLastUpdateMoreThanHour()
+                guard Date.isLastUpdateMoreThanHour(city: cityData)
                 else { return }
                 let weather = await weatherService.getTemp(cityData: cityData)
                 switch weather {
@@ -194,7 +198,7 @@ private extension WeatherViewModel {
         self.minTemp = "\(Int(data.weather?.minTemp ?? 0.0))"
         self.maxTemp = "\(Int(data.weather?.maxTemp ?? 0.0))"
         self.currentTemp = CGFloat(data.weather?.temp ?? 0.0)
-        self.windSpeed = "\(data.weather?.windSpeed ?? 0.0) km/h"
+        self.windSpeed = "\(data.weather?.windSpeed ?? 0.0)"
         self.humidity = "\(Int(data.weather?.humidity ?? 0.0))%"
         self.weatherDescription = data.weather?.weatherDescription ?? ""
         self.icon = data.weather?.icon ?? ""
