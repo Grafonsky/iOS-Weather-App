@@ -1,4 +1,4 @@
-# ⛈️ iOS Weather App
+# iOS Weather App
 
 <p align="center">
 <img width="200" alt="Screenshot 2021-09-29 at 00 21 27" src="https://user-images.githubusercontent.com/44808549/209850310-d4ad3122-10bb-4426-8da3-660ce18ca806.png">
