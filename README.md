@@ -12,13 +12,12 @@
 - Different animations for various weather
 
 ## Stack
-- Target to iOS 16
+- Target to iOS 15
 - MVVM
 - Swift 5.7
 - Combine
 - CoreData
 - CoreLocation
-- [SwiftLint](https://github.com/realm/SwiftLint)
 
 ## Screenshots
 ### Access location screens
