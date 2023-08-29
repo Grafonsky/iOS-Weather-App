@@ -55,9 +55,10 @@ struct CheckLocationView: View {
                         
                         let settingsURL = URL(string: UIApplication.openSettingsURLString)
                         Button {
-                            UIApplication.shared.open(settingsURL ?? .applicationDirectory,
-                                                      options: [:],
-                                                      completionHandler: nil)
+                            UIApplication.shared.open(
+                                settingsURL ?? .init(fileURLWithPath: ""),
+                                options: [:],
+                                completionHandler: nil)
                         } label: {
                             Text("Tap for open settings")
                                 .foregroundColor(.blue)

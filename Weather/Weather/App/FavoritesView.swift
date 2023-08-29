@@ -108,7 +108,6 @@ struct FavoritesView: View {
                                 }
                             }
                         }
-                        .scrollContentBackground(.hidden)
                         .coordinateSpace(name: "scroll")
                         .gesture(DragGesture()
                             .onChanged({ _ in

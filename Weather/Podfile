@@ -1,6 +1,0 @@
-target 'Weather' do
-  use_frameworks!
-
-  pod 'SwiftLint'
-
-end
